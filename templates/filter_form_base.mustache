@@ -36,13 +36,11 @@
 {{#courses}}
   {{> core_form/element-autocomplete-inline }}
 {{/courses}}
-<div class="mt-3">
-  {{#starting_date}}
-    {{> report_modulecompletion/date_selector}}
-  {{/starting_date}}
-</div>
+{{#starting_date}}
+  {{> core_form/element-date_selector-inline}}
+{{/starting_date}}
 {{#ending_date}}
-  {{> report_modulecompletion/date_selector}}
+  {{> core_form/element-date_selector-inline}}
 {{/ending_date}}
 {{#order_by_column}}
   {{> core_form/element-select-inline}}

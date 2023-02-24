@@ -53,11 +53,11 @@ class external extends external_api {
         $params = self::validate_parameters(
             self::search_user_parameters(),
             [
-                'user_name' => $userstring,
+                'userName' => $userstring,
             ]
         );
 
-        $renderable = new output\ajax\user_search($params['user_name']);
+        $renderable = new output\ajax\user_search($params['userName']);
         $renderer = $PAGE->get_renderer('report_modulecompletion');
 
         $data = $renderable->export_for_template($renderer);
@@ -76,7 +76,7 @@ class external extends external_api {
             VALUE_REQUIRED
         );
         $params = [
-            'user_name' => $username,
+            'userName' => $username,
         ];
         return new external_function_parameters($params);
     }
@@ -107,11 +107,11 @@ class external extends external_api {
         $params = self::validate_parameters(
             self::search_cohort_parameters(),
             [
-                'cohort_name' => $cohortstring,
+                'cohortName' => $cohortstring,
             ]
         );
 
-        $renderable = new output\ajax\cohort_search($params['cohort_name']);
+        $renderable = new output\ajax\cohort_search($params['cohortName']);
         $renderer = $PAGE->get_renderer('report_modulecompletion');
 
         $data = $renderable->export_for_template($renderer);
@@ -130,7 +130,7 @@ class external extends external_api {
             VALUE_REQUIRED
         );
         $params = [
-            'cohort_name' => $cohortname
+            'cohortName' => $cohortname
         ];
         return new external_function_parameters($params);
     }
@@ -161,11 +161,11 @@ class external extends external_api {
         $params = self::validate_parameters(
             self::search_course_parameters(),
             [
-                'course_name' => $coursestring,
+                'courseName' => $coursestring,
             ]
         );
 
-        $renderable = new output\ajax\course_search($params['course_name']);
+        $renderable = new output\ajax\course_search($params['courseName']);
         $renderer = $PAGE->get_renderer('report_modulecompletion');
 
         $data = $renderable->export_for_template($renderer);
@@ -184,7 +184,7 @@ class external extends external_api {
             VALUE_REQUIRED
         );
         $params = [
-            'course_name' => $coursename,
+            'courseName' => $coursename,
         ];
         return new external_function_parameters($params);
     }

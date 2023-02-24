@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(["jquery", "core/ajax", "core/notification"], function (
+define(["jquery", "core/ajax", "core/notification"], function(
   $,
   Ajax,
   Notification
@@ -34,10 +34,10 @@ define(["jquery", "core/ajax", "core/notification"], function (
      * @param {Array} results An array or results.
      * @return {Array} New array of results.
      */
-    processResults: function (selector, results) {
+    processResults: function(selector, results) {
       var options = [];
       if (results.courses) {
-        $.each(results.courses, function (index, data) {
+        $.each(results.courses, function(index, data) {
           options.push({
             value: data.id,
             label: data.fullname,
@@ -54,16 +54,17 @@ define(["jquery", "core/ajax", "core/notification"], function (
      * @param {String} query The query string.
      * @param {Function} callback A callback function receiving an array of results.
      */
-    transport: function (selector, query, callback) {
+    /* eslint-disable promise/no-callback-in-promise */
+    transport: function(selector, query, callback) {
       var promise = Ajax.call([
         {
           methodname: "report_modulecompletion_get_courses",
           args: {
-            course_name: query,
+            courseName: query,
           },
         },
       ])[0];
-      promise.fail(Notification.exception).then(callback);
+      promise.then(callback).catch(Notification.exception);
     },
   };
 });
