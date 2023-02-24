@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="report/modulecompletion/db" VERSION="20180328" COMMENT="XMLDB file for Moodle report/modulecompletion"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="report_mc_filter" COMMENT="Stores the filters saved by users">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="The user who saved the filter"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the saved filter"/>
+        <FIELD NAME="users" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Selected users in the filter autocomplete"/>
+        <FIELD NAME="cohorts" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Selected cohorts in the filter autocomplete"/>
+        <FIELD NAME="only_cohorts_courses" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" COMMENT="Boolean which defines if the filter should only fetch courses for which selected cohorts are enrolled"/>
+        <FIELD NAME="courses" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Selected courses in the filter autocomplete"/>
+        <FIELD NAME="starting_date" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Starting date picked in the filter form"/>
+        <FIELD NAME="ending_date" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Ending date picked in the filter form"/>
+        <FIELD NAME="order_by_column" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="student" SEQUENCE="false" COMMENT="Defines what will reports be ordered by"/>
+        <FIELD NAME="order_by_type" TYPE="char" LENGTH="5" NOTNULL="true" DEFAULT="asc" SEQUENCE="false" COMMENT="Defines the direction for the ordering"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="The user who saved the filter"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

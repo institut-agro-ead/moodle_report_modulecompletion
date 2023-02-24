@@ -1,0 +1,100 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template report_modulecompletion/report_details
+
+    Renders modules completion for every course where the user has at least completed one module.
+
+    Example context (json):
+    {
+      "courses": [
+        {
+          "course_name_as_title": "My course",
+          "meta_totals": {
+            "name": "My metadata",
+            "counter": "15"
+          },
+          "has_restrictions": true,
+          "completed_modules": 10,
+          "total_modules": 50,
+          "completions": {
+            "headers": ["Month", "Course", "Section", "Module", "Completed on"],
+            "rows": [
+              ["2022-12", "My course", "My section", "My module", "2022-12-22"],
+              ["2023-01", "Their course", "Their section", "Their module", "2023-01-12"],
+            ]
+          }
+        }
+      ]
+    }
+}}
+<div class="hidable_content hidable_content_higher_container mx-5">
+  <div>
+    <button class="ml-3 mb-3 btn btn-outline-info show_hide_all_trigger" type="button" data-collapsed="true" data-button-text-show="{{#str}} show_all, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} hide_all, report_modulecompletion {{/str}}" data-show-all-children="true">
+      <span>{{#str}} show_all, report_modulecompletion {{/str}}</span>&nbsp;<i class="fa fa-chevron-down"></i>
+    </button>
+    {{#courses}}
+      <hr class="mt-4">
+      <div class="report_user_course hidable_content_higher_container">
+        <div class="card-block d-flex justify-content-between align-items-center">
+          <div class="course_infos mr-4">
+            <h4 class="card-title">{{{ course_name_as_title }}}</h4>
+            {{#meta_totals}}
+            <h6 class="card-subtitle text-muted mb-2">Total ({{#str}} course {{/str}}) {{ name }} : <strong>{{ counter }}</strong></h6>
+            {{/meta_totals}}
+            {{#has_restrictions}}
+              <div class="text-warning"><i class="fa fa-exclamation-triangle"></i><span class="ml-2">{{#str}} has_restrictions, report_modulecompletion{{/str}}</span></div>
+            {{/has_restrictions}}
+          </div>
+          <div class="order-last d-flex align-items-center flex-shrink-0">
+            <div class="course_progress">
+              {{#progress-bar}}
+                {{> report_modulecompletion/progress-bar }}
+              {{/progress-bar}}
+              <h6 class="card-subtitle text-muted">{{ completed_modules }} / {{ total_modules }} {{#str}} completed_modules, report_modulecompletion {{/str}}</h6>
+            </div>
+            <button class="ml-3 mb-3 btn btn-outline-info show_hide_all_trigger" type="button" data-collapsed="true" data-button-text-show="{{#str}} expand, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} collapse, report_modulecompletion {{/str}}">
+              <span>{{#str}} expand, report_modulecompletion {{/str}}</span>&nbsp;<i class="fa fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+        <div class="hidable_content table-responsive mt-2" aria-expanded="false">
+          <div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  {{#completions.headers}}
+                  <th>{{.}}</th>
+                  {{/completions.headers}}
+                </tr>
+              </thead>
+              <tbody>
+                {{#completions.rows}}
+                <tr>
+                  {{#.}}
+                  <td>{{{.}}}</td>
+                  {{/.}}
+                </tr>
+                {{/completions.rows}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    {{/courses}}
+  </div>
+</div>

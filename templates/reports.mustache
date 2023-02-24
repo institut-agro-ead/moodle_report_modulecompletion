@@ -1,0 +1,149 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template report_modulecompletion/reports
+
+    Renders top level of the reports (users list) and filter
+
+    Example context (json):
+    {
+      "filter": {
+        "name": "My filter",
+        "is_quick_filter": false,
+        "has_cohorts": true,
+        "cohorts": [
+          {
+            "name": "First cohort",
+            "users": [
+              {
+                "firstname": "John",
+                "lastname": "Smith",
+              }
+            ]
+          }
+        ],
+        "only_cohorts_courses": true,
+        "starting_date": "2022-01-01",
+        "ending_date": "2022-12-31",
+        "order_by_column": "Student",
+        "order_by_type": "Ascending",
+      },
+      "max_progress": 98,
+      "count": 120,
+      "reports": [
+        {
+          "firstname": "John",
+          "lastname": "Smith",
+          "email": "john.smith@example.com",
+          "meta_totals": {
+            "name": "My metadata",
+            "counter": "15"
+          },
+          "most_recent_completed_module_date": "2023-01-01",
+          "completed_modules": 10,
+          "total_modules": 50,
+          "courses": []
+        }
+      ]
+    }
+}}
+<div class="report_modulecompletion_reports hidable_content_higher_container container-fuild">
+  {{#filter}}
+    <h4>
+      <span>{{name}}</span>
+      {{^is_quick_filter}}
+      <a href="/report/modulecompletion/index.php?action=editfilter&id={{id}}" class="text-muted" title="{{#str}} edit_filter_title, report_modulecompletion {{/str}}">
+        <i class="fa fa-cog"></i>
+      </a>
+      {{/is_quick_filter}}
+    </h4>
+    {{#has_cohorts}}
+    <div class="d-flex">
+      <h5 class="text-muted">{{#str}}cohorts, report_modulecompletion{{/str}}&nbsp;:&nbsp;</h5>
+      <div class="cohorts">
+        {{#cohorts}}
+          <a tabindex="0" role="button" class="badge badge-info" data-toggle="popover" data-html="true" data-placement="auto" data-content="{{#users}}<div>{{firstname}}&nbsp;{{lastname}}</div>{{/users}}">{{name}}</a>
+        {{/cohorts}}
+      </div>
+    </div>
+    <h5 class="text-muted">{{#str}}form_only_cohorts_courses, report_modulecompletion{{/str}} : {{#only_cohorts_courses}}{{#str}}yes{{/str}}{{/only_cohorts_courses}}{{^only_cohorts_courses}}{{#str}}no{{/str}}{{/only_cohorts_courses}}</h5>
+    {{/has_cohorts}}
+    <h5 class="text-muted">{{#str}}form_starting_date, report_modulecompletion{{/str}} : {{starting_date}}</h5>
+    <h5 class="text-muted">{{#str}}form_ending_date, report_modulecompletion{{/str}} : {{ending_date}}</h5>
+    <h5 class="text-muted">{{#str}}form_order_by_column, report_modulecompletion{{/str}} : {{order_by_column}}</h5>
+    <h5 class="text-muted">{{#str}}form_order_by_type, report_modulecompletion{{/str}} : {{order_by_type}}</h5>
+    <div class="d-flex justify-content-between">
+      <div class="d-inline-block">
+        <a href="/report/modulecompletion/index.php?action=export{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (CSV)</a>
+        <a href="/report/modulecompletion/index.php?action=export&type=xlsx{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (Excel)</a>
+        {{#is_quick_filter}}
+          <a href="/report/modulecompletion/index.php?action=savequickfilter" class="ml-2 btn btn-primary">{{#str}} form_save_filter, report_modulecompletion {{/str}}</a>
+        {{/is_quick_filter}}
+      </div>
+      <button type="button" class="btn btn-outline-info show_hide_all_trigger" data-collapsed="true" data-button-text-show="{{#str}} show_all, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} hide_all, report_modulecompletion {{/str}}" data-show-all-children="true"><span>{{#str}} show_all, report_modulecompletion {{/str}}</span>&nbsp;<i class="fa fa-chevron-down"></i></button>
+    </div>
+  {{/filter}}
+  <div class="text-center lead mt-4">
+    <p class="mb-0">{{#str}} max_achievement_percentage, report_modulecompletion {{/str}} - <strong>{{ max_progress }}%</strong></p>
+    <p class="mb-0">{{#str}} reports_count, report_modulecompletion {{/str}} - <strong>{{ count }}</strong></p>
+  </div>
+  {{#reports}}
+    <div class="report_user hidable_content_higher_container col-12 mt-4">
+      <div class="card">
+        <div class="card-block d-flex justify-content-between align-items-center">
+          <div class="user_infos">
+            <h4 class="card-title">
+              <span>{{ first_name }}&nbsp;{{ last_name }}</span>
+              <a href="/message/index.php?id={{user_id}}" title="Envoyer un message" class="ml-2 text-secondary">
+                <small><i class="fa fa-comment"></i></small>
+              </a>
+            </h4>
+            <h6 class="card-subtitle text-muted mb-2">{{ email }}</h6>
+            {{#meta_totals}}
+            <p class="card-text mb-0">Total {{ name }} : <strong>{{ counter }}</strong></p>
+            {{/meta_totals}}
+            <p class="card-text my-0">{{#str}} last_completion_date, report_modulecompletion {{/str}} : <strong>{{ most_recent_completed_module_date }}</strong></p>
+          </div>
+          <div class="order-last d-flex align-items-center">
+            <div class="user_progress">
+              {{#progress-bar}}
+                {{> report_modulecompletion/progress-bar }}
+              {{/progress-bar}}
+              <h6 class="card-subtitle text-muted">{{ completed_modules }} / {{ total_modules }} {{#str}} completed_modules, report_modulecompletion {{/str}}</h6>
+            </div>
+            <button class="ml-3 my-3 btn btn-outline-info show_hide_all_trigger" type="button" data-collapsed="true" data-button-text-show="{{#str}} expand, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} collapse, report_modulecompletion {{/str}}" aria-expanded="false">
+              <span>{{#str}} expand, report_modulecompletion {{/str}}</span>&nbsp;<i class="fa fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+        {{> report_modulecompletion/report_details }}
+      </div>
+    </div>
+  {{/reports}}
+  {{^reports}}
+    <div class="text-primary text-center mt-3 p-2">
+      {{#str}}no_reports, report_modulecompletion{{/str}}
+    </div>
+  {{/reports}}
+  <a href="/report/modulecompletion/index.php" class="btn btn-primary mt-3">{{#str}}backtofilters, report_modulecompletion{{/str}}<a/>
+</div>
+
+{{#js}}
+  require(['report_modulecompletion/reports'], function (Reports) {
+    Reports.init();
+  });
+{{/js}}

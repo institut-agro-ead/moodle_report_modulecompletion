@@ -1,0 +1,105 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template report_modulecompletion/filters_list
+
+    This template renders the user’s list of filters.
+
+    Example context (json):
+    {
+        "filters": [
+          {
+            "id": 1,
+            "name": "My filter"
+          },
+          {
+            "id": 2,
+            "name": "My other filter"
+          }
+        ],
+        sesskey: "HezUm1qg6aru"
+    }
+}}
+<div class="report_modulecompletion_filters_list">
+  <div class="hidable-block">
+    <input type="checkbox" id="{{uniqid}}-filters-list">
+    <label class="d-flex align-items-center" for="{{uniqid}}-filters-list">{{#str}} your_filters, report_modulecompletion {{/str}}</label>
+    <hr>
+    <div class="hidable-content">
+      <a href="?action=addfilter" class="btn btn-primary mb-3">{{#str}} add_filter, report_modulecompletion {{/str}}</a>
+      {{#filters}}
+      <div class="d-flex align-items-center">
+        <a href="?action=loadfilter&id={{id}}" title="{{#str}} load_filter_title, report_modulecompletion {{/str}}"><h4>{{name}}</h4>
+        </a>
+        <div class="ml-2 mb-1 d-flex align-items-center">
+          <a href="?action=editfilter&id={{id}}" class="text-muted" title="{{#str}} edit_filter_title, report_modulecompletion {{/str}}">
+            <i class="fa fa-cog"></i>
+          </a>
+          <a href="?action=copyfilter&id={{id}}" class=" ml-2 text-muted" title="{{#str}} copy_filter_title, report_modulecompletion {{/str}}">
+            <i class="fa fa-copy"></i>
+          </a>
+          <a href="?action=deletefilter&id={{id}}&sesskey={{sesskey}}" class="ml-2 text-muted delete-filter-button" title="{{#str}} delete_filter_title, report_modulecompletion {{/str}}">
+            <i class="fa fa-trash"></i>
+          </a>
+        </div>
+      </div>
+      {{/filters}}
+    </div>
+  </div>
+  <div class="hidable-block mt-5">
+    <input type="checkbox" id="{{uniqid}}-instant-filter">
+    <label class="d-flex align-items-center" for="{{uniqid}}-instant-filter">{{#str}} quick_filter, report_modulecompletion {{/str}}</label>
+    <hr>
+    <div class="hidable-content">
+      {{#form}}
+        {{> report_modulecompletion/filter_form_inline }}
+      {{/form}}
+    </div>
+  </div>
+  <div class="modal fade" id="{{uniqid}}-delete-filter-modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{#str}} areyousure, core {{/str}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{#str}} confirm_filter_deletion, report_modulecompletion {{/str}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="{{uniqid}}-confirm-delete-filter">{{#str}} confirm, core {{/str}}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{#str}} cancel, core {{/str}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{#js}}
+  require(['jquery'], function ($) {
+    $('body').on('click', '#{{uniqid}}-confirm-delete-filter', function(e) {
+      window.location.href = $(this).data('href');
+    });
+    $('body').on('click', '.delete-filter-button', function(e) {
+      var href = $(this).prop('href');
+      $('#{{uniqid}}-confirm-delete-filter').data('href', href);
+      $('#{{uniqid}}-delete-filter-modal').modal('toggle');
+      return false;
+    })
+  });
+{{/js}}
