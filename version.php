@@ -28,4 +28,4 @@ $plugin->version = 2023022000; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires = 2022041200; // Requires this Moodle version.
 $plugin->component = 'report_modulecompletion'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = "4.1.0.1";
+$plugin->release = '4.1.0.1';
