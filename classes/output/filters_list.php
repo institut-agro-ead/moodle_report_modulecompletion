@@ -59,7 +59,7 @@ class filters_list implements renderable, templatable {
             'name' => $filter->get('name')
             ];
         }
-        $data->sesskey  = sesskey(); // For filter removal.
+        $data->sesskey = sesskey(); // For filter removal.
         return $data;
     }
 

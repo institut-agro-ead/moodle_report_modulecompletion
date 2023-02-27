@@ -49,7 +49,7 @@
     </button>
     {{#courses}}
       <hr class="mt-4">
-      <div class="report_user_course hidable_content_higher_container">
+      <div class="report_user_course hidable_content_higher_container" role="list">
         <div class="card-block d-flex justify-content-between align-items-center">
           <div class="course_infos mr-4">
             <h4 class="card-title">{{{ course_name_as_title }}}</h4>
@@ -72,7 +72,7 @@
             </button>
           </div>
         </div>
-        <div class="hidable_content table-responsive mt-2" aria-expanded="false">
+        <div class="hidable_content table-responsive mt-2" role="listitem" aria-expanded="false">
           <div>
             <table class="table table-striped">
               <thead>

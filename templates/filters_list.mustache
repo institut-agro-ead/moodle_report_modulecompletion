@@ -91,15 +91,15 @@
   </div>
 </div>
 {{#js}}
-  require(['jquery'], function ($) {
-    $('body').on('click', '#{{uniqid}}-confirm-delete-filter', function(e) {
+  require(['jquery'], function($) {
+    $('body').on('click', '#{{uniqid}}-confirm-delete-filter', function() {
       window.location.href = $(this).data('href');
     });
-    $('body').on('click', '.delete-filter-button', function(e) {
+    $('body').on('click', '.delete-filter-button', function() {
       var href = $(this).prop('href');
       $('#{{uniqid}}-confirm-delete-filter').data('href', href);
       $('#{{uniqid}}-delete-filter-modal').modal('toggle');
       return false;
-    })
+    });
   });
 {{/js}}

@@ -139,11 +139,11 @@
       {{#str}}no_reports, report_modulecompletion{{/str}}
     </div>
   {{/reports}}
-  <a href="/report/modulecompletion/index.php" class="btn btn-primary mt-3">{{#str}}backtofilters, report_modulecompletion{{/str}}<a/>
+  <a href="/report/modulecompletion/index.php" class="btn btn-primary mt-3">{{#str}}backtofilters, report_modulecompletion{{/str}}</a>
 </div>
 
 {{#js}}
-  require(['report_modulecompletion/reports'], function (Reports) {
+  require(['report_modulecompletion/reports'], function(Reports) {
     Reports.init();
   });
 {{/js}}

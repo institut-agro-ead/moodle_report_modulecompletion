@@ -18,6 +18,18 @@
     @template report_modulecompletion/filter_form_base
 
     This template renders the filters inline form.
+
+    Example context (json):
+    {
+        "users": [],
+        "cohorts": [],
+        "courses": [],
+        "only_cohorts_courses_group": 0,
+        "starting_date": "2022-12-01",
+        "ending_date": "2022-12-31",
+        "order_by_column": "student",
+        "order_by_type": "asc"
+    }
 }}
 <div class="report_modulecompletion_filter_form d-flex justify-content-center">
   <form autocomplete="off" method="post" action="/report/modulecompletion/index.php?action=quickfilter">

@@ -16,6 +16,13 @@
 }}
 {{!
     @template report_modulecompletion/error
+
+    Renders any error from the plugin
+
+    Example context (json):
+    {
+        "error": "This is an error."
+    }
 }}
 <div class="report_modulecompletion_error">
   <div class="bg-danger text-white p-2 mb-2">{{error}}</div>
