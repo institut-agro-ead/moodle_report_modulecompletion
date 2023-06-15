@@ -115,6 +115,7 @@ class reports implements renderable, templatable {
      * @return array
      */
     private function build_course_infos($report) {
+        global $USER;
         $coursecontext = \context_course::instance($report->course_id);
         $userenrolled = is_enrolled($coursecontext, $USER->id, '', true);
         $courseinfos = [
@@ -173,6 +174,7 @@ class reports implements renderable, templatable {
      * @return array
      */
     private function build_row($report) {
+        global $USER;
         $coursecontext = \context_course::instance($report->course_id);
         $userenrolled = is_enrolled($coursecontext, $USER->id, '', true);
         return [

@@ -58,6 +58,9 @@ class filter_form implements renderable, templatable {
             if (\get_class($elem) === 'MoodleQuickForm_hidden') {
                 $data->hidden[] = $elem->_attributes;
             } else {
+                if ($elem->getAttributes() === null) { // This avoids a warning during rendering of groups.
+                    $elem->setAttributes([]);
+                }
                 $data->{$name} = [
                 'label' => $elem->getLabel(),
                 'element' => $elem->export_for_template($output)
