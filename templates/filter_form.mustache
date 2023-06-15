@@ -34,7 +34,8 @@
 <div class="report_modulecompletion_filter_form d-flex justify-content-center">
   <form autocomplete="off" method="post">
     {{#name}}
-      {{> core_form/element-text-inline }}
+      {{< core_form/element-text-inline }}
+      {{/ core_form/element-text-inline }}
     {{/name}}
     {{> report_modulecompletion/filter_form_base }}
   </form>
