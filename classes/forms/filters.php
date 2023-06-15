@@ -50,13 +50,16 @@ class filters extends persistent {
             'text',
             'name',
             \get_string('form_filter_name', 'report_modulecompletion'),
-            ['placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]);
+            ['id' => 'report_modulecompletion_name',
+            'placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]);
 
         $mform->addElement('autocomplete', 'users', null, $this->get_users(), $this->get_user_autocomplete_options());
         $mform->addElement('autocomplete', 'cohorts', null, $this->get_cohorts(), $this->get_cohort_autocomplete_options());
         $radioarray = [];
-        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('yes'), 1);
-        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('no'), 0);
+        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('yes'), 1,
+        ['id' => 'report_modulecompletion_only_cohorts_courses_group_yes']);
+        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('no'), 0,
+        ['id' => 'report_modulecompletion_only_cohorts_courses_group_no']);
         $mform->addGroup(
             $radioarray,
             'only_cohorts_courses_group',
@@ -69,30 +72,30 @@ class filters extends persistent {
             'startyear' => 2016,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_server_timezone_object()
-        ], []);
+        ], ['id' => 'report_modulecompletion_starting_date']);
 
         $mform->addElement('date_selector', 'ending_date', \get_string('form_ending_date', 'report_modulecompletion'), [
             'startyear' => 2016,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_server_timezone_object()
-        ], []);
+        ], ['id' => 'report_modulecompletion_ending_date']);
         $orderby = $mform->addElement('select', 'order_by_column', \get_string('form_order_by_column', 'report_modulecompletion'), [
             'student' => \get_string('form_order_by_student', 'report_modulecompletion'),
             'completion' => \get_string('form_order_by_completion', 'report_modulecompletion'),
             'last_completed' => \get_string('form_order_by_last_completed', 'report_modulecompletion'),
-        ], ['id' => 'order_by_column']);
+        ], ['id' => 'report_modulecompletion_order_by_column']);
         $orderby->setSelected('student');
 
         $orderbytype = $mform->addElement('select', 'order_by_type', \get_string('form_order_by_type', 'report_modulecompletion'), [
             'asc' => \get_string('form_order_by_asc', 'report_modulecompletion'),
             'desc' => \get_string('form_order_by_desc', 'report_modulecompletion'),
-        ], ['id' => 'order_by_type']);
+        ], ['id' => 'report_modulecompletion_order_by_type']);
         $orderbytype->setSelected('asc');
         $mform->addElement(
             'submit',
             'save_filter_form',
             \get_string('form_save_filter', 'report_modulecompletion'),
-            ['id' => 'save_filter_form']);
+            ['id' => 'report_modulecompletion_save_filter_form']);
     }
 
     /**
@@ -294,7 +297,8 @@ class filters extends persistent {
             'tags' => false,
             'showsuggestions' => true,
             'noselectionstring' => \get_string('user_noselectionstring', 'report_modulecompletion'),
-            'placeholder' => \get_string('user_placeholder', 'report_modulecompletion')
+            'placeholder' => \get_string('user_placeholder', 'report_modulecompletion'),
+            'id' => 'report_modulecompletion_user_autocomplete'
         ];
     }
 
@@ -311,7 +315,8 @@ class filters extends persistent {
             'tags' => false,
             'showsuggestions' => true,
             'noselectionstring' => \get_string('cohort_noselectionstring', 'report_modulecompletion'),
-            'placeholder' => \get_string('cohort_placeholder', 'report_modulecompletion')
+            'placeholder' => \get_string('cohort_placeholder', 'report_modulecompletion'),
+            'id' => 'report_modulecompletion_cohort_autocomplete'
         ];
     }
 
@@ -328,7 +333,8 @@ class filters extends persistent {
             'tags' => false,
             'showsuggestions' => true,
             'noselectionstring' => \get_string('course_noselectionstring', 'report_modulecompletion'),
-            'placeholder' => \get_string('course_placeholder', 'report_modulecompletion')
+            'placeholder' => \get_string('course_placeholder', 'report_modulecompletion'),
+            'id' => 'report_modulecompletion_course_autocomplete'
         ];
     }
 }
