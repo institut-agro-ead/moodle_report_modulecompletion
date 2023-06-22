@@ -1,33 +1,29 @@
 /** Styles for the plugin **/
 
 .path-admin-report-modulecompletion details summary {
-  font-size: 2rem;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
+    font-size: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
-.path-admin-report-modulecompletion
-  .report_modulecompletion_reports
-  .card-block {
-  padding: 1.25rem;
+.path-admin-report-modulecompletion .report_modulecompletion_reports .card-block {
+    padding: 1.25rem;
 }
 
-.path-admin-report-modulecompletion
-  .report_modulecompletion_reports
-  .progress-bar-wrapper {
-  font-size: 0.85rem;
-  margin-bottom: 0.25rem;
-}
+.path-admin-report-modulecompletion .report_modulecompletion_reports .progress-bar-wrapper {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    }
 
 .path-admin-report-modulecompletion .report_modulecompletion_reports .progress {
-  height: 0.25rem;
+    height: 0.25rem;
 }
 
 /** css print **/
 
 @media print {
-  .path-admin-report-modulecompletion .report_modulecompletion_reports .btn {
-    display: none;
-  }
+    .path-admin-report-modulecompletion .report_modulecompletion_reports .btn {
+        display: none;
+    }
 }
