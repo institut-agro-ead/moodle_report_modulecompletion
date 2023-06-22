@@ -46,18 +46,19 @@ $string['sql_month_date_format'] = '%m-%Y';
 $string['sql_full_date_format'] = '%d-%m-%Y';
 
 // Form.
-$string['user_noselectionstring'] = 'Entrez un apprenant';
+$string['user_label'] = 'Entrez un apprenant';
 $string['user_placeholder'] = 'Nom';
-$string['cohort_noselectionstring'] = 'Entrez une cohorte';
+$string['cohort_label'] = 'Entrez une cohorte';
 $string['cohort_placeholder'] = 'Nom';
 $string['cohorts'] = 'Cohortes';
-$string['course_noselectionstring'] = 'Entrez un cours';
+$string['course_label'] = 'Entrez un cours';
 $string['course_placeholder'] = 'Nom';
 
 $string['form_filter_name'] = 'Nom du filtre';
 $string['form_filter_name_placeholder'] = 'Nom';
 $string['form_save_filter'] = 'Enregistrer le filtre';
-$string['form_only_cohorts_courses'] = 'Afficher seulement les cours et activités associés aux cohortes sélectionnées';
+$string['form_only_cohorts_courses'] = 'Seulement les cours des cohortes';
+$string['form_only_cohorts_courses_help'] = 'Afficher seulement les cours et activités associés aux cohortes sélectionnées';
 $string['form_starting_date'] = 'Date de début';
 $string['form_ending_date'] = 'Date de fin';
 $string['form_order_by_column'] = 'Trié par';

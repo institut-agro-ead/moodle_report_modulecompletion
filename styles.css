@@ -1,51 +1,33 @@
 /** Styles for the plugin **/
 
-.hidable-block input[type="checkbox"] {
-    display: none;
+.path-admin-report-modulecompletion details summary {
+  font-size: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.hidable-block label:not([class*="form"]) {
-    font-size: 2rem;
-    cursor: pointer;
+.path-admin-report-modulecompletion
+  .report_modulecompletion_reports
+  .card-block {
+  padding: 1.25rem;
 }
 
-.hidable-block label:not([class*="form"])::after {
-    content: "▼";
-    display: block;
-    font-size: 1.5rem;
+.path-admin-report-modulecompletion
+  .report_modulecompletion_reports
+  .progress-bar-wrapper {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
 }
 
-.hidable-block input[type="checkbox"]:checked + label::after {
-    content: "▲";
-}
-
-.hidable-block input[type="checkbox"]:checked ~ .hidable-content {
-    display: none;
-}
-
-.report_modulecompletion_reports .hidable_content {
-    height: 0;
-    overflow: hidden;
-    transition: height 0.5s linear;
-}
-
-.report_modulecompletion_reports .card-block {
-    padding: 1.25rem;
-}
-
-.report_modulecompletion_reports .progress-bar-wrapper {
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
-}
-
-.report_modulecompletion_reports .progress {
-    height: 0.25rem;
+.path-admin-report-modulecompletion .report_modulecompletion_reports .progress {
+  height: 0.25rem;
 }
 
 /** css print **/
 
 @media print {
-    .report_modulecompletion_reports .btn {
-        display: none;
-    }
+  .path-admin-report-modulecompletion .report_modulecompletion_reports .btn {
+    display: none;
+  }
 }

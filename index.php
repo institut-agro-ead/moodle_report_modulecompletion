@@ -125,7 +125,6 @@ switch ($action) {
         break;
     case REPORT_MODULECOMPLETION_ACTION_QUICK_FILTER:
         $form = report_modulecompletion_filter_form_action(null, [], true);
-        $form->changeToQuickFilter();
         // The form is valid, we fetch the reports and show them.
         if ($validateddata = $form->get_data()) {
             // We simulate a new filter to save.
@@ -194,8 +193,7 @@ switch ($action) {
         break;
     default:
         $filters = report_modulecompletion_get_user_filters();
-        $form = report_modulecompletion_filter_form_action();
-        $form->changeToQuickFilter();
+        $form = report_modulecompletion_filter_form_action(null, [], true);
         $out .= $output->render_filters_list($filters, $form);
         break;
 }

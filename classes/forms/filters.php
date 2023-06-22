@@ -45,57 +45,62 @@ class filters extends persistent {
         // User ID.
         $mform->addElement('hidden', 'userid');
         $mform->setConstant('userid', $this->_customdata['userid']);
+        if (isset($this->_customdata['quickfilter']) && $this->_customdata['quickfilter'] === false) {
+            $mform->addElement(
+                'text',
+                'name',
+                \get_string('form_filter_name', 'report_modulecompletion'),
+                ['id'             => 'report_modulecompletion_name',
+            'placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]
+            );
+        }
 
-        $mform->addElement(
-            'text',
-            'name',
-            \get_string('form_filter_name', 'report_modulecompletion'),
-            ['id' => 'report_modulecompletion_name',
-            'placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]);
-
-        $mform->addElement('autocomplete', 'users', null, $this->get_users(), $this->get_user_autocomplete_options());
-        $mform->addElement('autocomplete', 'cohorts', null, $this->get_cohorts(), $this->get_cohort_autocomplete_options());
+        $mform->addElement('autocomplete', 'users', \get_string('user_label', 'report_modulecompletion'),
+            $this->get_users(), $this->get_user_autocomplete_options());
+        $mform->addElement('autocomplete', 'cohorts', \get_string('cohort_label', 'report_modulecompletion'),
+            $this->get_cohorts(), $this->get_cohort_autocomplete_options());
         $radioarray = [];
-        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('yes'), 1,
-        ['id' => 'report_modulecompletion_only_cohorts_courses_group_yes']);
-        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('no'), 0,
-        ['id' => 'report_modulecompletion_only_cohorts_courses_group_no']);
+        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('yes'), 1);
+        $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('no'), 0);
         $mform->addGroup(
             $radioarray,
             'only_cohorts_courses_group',
             \get_string('form_only_cohorts_courses', 'report_modulecompletion'),
             [' '],
             false);
+        $mform->addHelpButton('only_cohorts_courses_group', 'form_only_cohorts_courses', 'report_modulecompletion');
 
-        $mform->addElement('autocomplete', 'courses', null, $this->get_courses(), $this->get_course_autocomplete_options());
+        $mform->addElement('autocomplete', 'courses', \get_string('course_label', 'report_modulecompletion'),
+            $this->get_courses(), $this->get_course_autocomplete_options());
         $mform->addElement('date_selector', 'starting_date', \get_string('form_starting_date', 'report_modulecompletion'), [
             'startyear' => 2016,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_server_timezone_object()
-        ], ['id' => 'report_modulecompletion_starting_date']);
+        ]);
 
         $mform->addElement('date_selector', 'ending_date', \get_string('form_ending_date', 'report_modulecompletion'), [
             'startyear' => 2016,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_server_timezone_object()
-        ], ['id' => 'report_modulecompletion_ending_date']);
+        ]);
         $orderby = $mform->addElement('select', 'order_by_column', \get_string('form_order_by_column', 'report_modulecompletion'), [
             'student' => \get_string('form_order_by_student', 'report_modulecompletion'),
             'completion' => \get_string('form_order_by_completion', 'report_modulecompletion'),
             'last_completed' => \get_string('form_order_by_last_completed', 'report_modulecompletion'),
-        ], ['id' => 'report_modulecompletion_order_by_column']);
+        ]);
         $orderby->setSelected('student');
 
         $orderbytype = $mform->addElement('select', 'order_by_type', \get_string('form_order_by_type', 'report_modulecompletion'), [
             'asc' => \get_string('form_order_by_asc', 'report_modulecompletion'),
             'desc' => \get_string('form_order_by_desc', 'report_modulecompletion'),
-        ], ['id' => 'report_modulecompletion_order_by_type']);
+        ]);
         $orderbytype->setSelected('asc');
         $mform->addElement(
             'submit',
             'save_filter_form',
-            \get_string('form_save_filter', 'report_modulecompletion'),
-            ['id' => 'report_modulecompletion_save_filter_form']);
+            \get_string(isset($this->_customdata['quickfilter']) && $this->_customdata['quickfilter'] === false ?
+                'form_save_filter' : 'form_quickfilter_submit', 'report_modulecompletion')
+        );
     }
 
     /**
@@ -141,41 +146,6 @@ class filters extends persistent {
     }
 
     /**
-     * Get form’s elements to render.
-     *
-     * @return array the list of elements
-     */
-    public function get_elements_for_render() {
-        $elements = [];
-        foreach ($this->_form->_elementIndex as $name => $index) {
-            $elements[$name] = $this->_form->_elements[$index];
-        }
-        return $elements;
-    }
-
-    /**
-     * Get error message for the given form element.
-     *
-     * @param string $element Name of form element to check
-     * @return string the error message
-     */
-    public function geterror($element) {
-        return $this->_form->getElementError($element);
-    }
-
-    /**
-     * Makes the current form a quick filter form.
-     *
-     * @return void
-     */
-    public function changetoquickfilter() {
-        $form = $this->_form;
-        $form->getElement('save_filter_form')
-            ->updateAttributes(['value' => \get_string('form_quickfilter_submit', 'report_modulecompletion')]);
-        $this->set_data(['name' => \get_string('form_quickfilter_name', 'report_modulecompletion')]);
-    }
-
-    /**
      * Convert fields.
      *
      * @param stdClass $data The data.
@@ -214,58 +184,57 @@ class filters extends persistent {
      * @return array Extra validations
      */
     public function extra_validation($data, $files, array &$errors) {
-        if ($data->name == null) {
-            return ['name' => \get_string('form_name_required', 'report_modulecompletion')];
+        if (isset($this->_customdata['quickfilter']) && $this->_customdata['quickfilter'] === false && $data->name == null) {
+            $errors['name'] = \get_string('form_name_required', 'report_modulecompletion');
+        } else if (isset($errors['name'])) {
+            unset($errors['name']);
         }
         if (empty($data->starting_date)) {
-            return ['starting_date' => \get_string('form_missing_starting_date', 'report_modulecompletion')];
+            $errors['starting_date'] = \get_string('form_missing_starting_date', 'report_modulecompletion');
         }
         if (empty($data->ending_date)) {
-            return ['ending_date' => \get_string('form_missing_ending_date', 'report_modulecompletion')];
+            $errors['ending_date'] = \get_string('form_missing_ending_date', 'report_modulecompletion');
         }
         $startingdate = $data->starting_date;
-        $endingdate = $data->ending_date;
+        $endingdate   = $data->ending_date;
         if (!$this->is_timestamp($startingdate)) {
-            return ['starting_date' => \get_string('form_missing_starting_date', 'report_modulecompletion')];
+            $errors['starting_date'] = \get_string('form_missing_starting_date', 'report_modulecompletion');
         }
         if (!$this->is_timestamp($endingdate)) {
-            return ['ending_date' => \get_string('form_missing_ending_date', 'report_modulecompletion')];
+            $errors['ending_date'] = \get_string('form_missing_ending_date', 'report_modulecompletion');
         }
         if ($startingdate > $endingdate) {
-            return ['starting_date' => \get_string('form_starting_date_must_be_anterior', 'report_modulecompletion')];
+            $errors['starting_date'] = \get_string('form_starting_date_must_be_anterior', 'report_modulecompletion');
         }
         if ($data->users != null) {
             global $DB;
-            $arrusers = explode(',', $data->users);
+            $arrusers               = explode(',', $data->users);
             list($insql, $inparams) = $DB->get_in_or_equal($arrusers);
-            $sql = 'SELECT COUNT(*) FROM {user} WHERE id ' . $insql;
-            $count = $DB->count_records_sql($sql, $inparams);
-            if ($count === count($arrusers)) {
-                return [];
+            $sql                    = 'SELECT COUNT(*) FROM {user} WHERE id ' . $insql;
+            $count                  = $DB->count_records_sql($sql, $inparams);
+            if ($count !== count($arrusers)) {
+                $errors['users'] = \get_string('form_user_not_found', 'report_modulecompletion');
             }
-            return ['users' => \get_string('form_user_not_found', 'report_modulecompletion')];
         }
         if ($data->cohorts != null) {
             global $DB;
-            $arrcohorts = explode(',', $data->cohorts);
+            $arrcohorts             = explode(',', $data->cohorts);
             list($insql, $inparams) = $DB->get_in_or_equal($arrcohorts);
-            $sql = 'SELECT COUNT(*) FROM {cohort} WHERE id ' . $insql;
-            $count = $DB->count_records_sql($sql, $inparams);
-            if ($count === count($arrcohorts)) {
-                return [];
+            $sql                    = 'SELECT COUNT(*) FROM {cohort} WHERE id ' . $insql;
+            $count                  = $DB->count_records_sql($sql, $inparams);
+            if ($count !== count($arrcohorts)) {
+                $errors['cohorts'] = \get_string('form_cohort_not_found', 'report_modulecompletion');
             }
-            return ['cohorts' => \get_string('form_cohort_not_found', 'report_modulecompletion')];
         }
         if ($data->courses != null) {
             global $DB;
-            $arrcourses = explode(',', $data->courses);
+            $arrcourses             = explode(',', $data->courses);
             list($insql, $inparams) = $DB->get_in_or_equal($arrcourses);
-            $sql = 'SELECT COUNT(*) FROM {course} WHERE id ' . $insql;
-            $count = $DB->count_records_sql($sql, $inparams);
-            if ($count === count($arrcourses)) {
-                return [];
+            $sql                    = 'SELECT COUNT(*) FROM {course} WHERE id ' . $insql;
+            $count                  = $DB->count_records_sql($sql, $inparams);
+            if ($count !== count($arrcourses)) {
+                $errors['courses'] = \get_string('form_course_not_found', 'report_modulecompletion');
             }
-            return ['courses' => \get_string('form_course_not_found', 'report_modulecompletion')];
         }
     }
 
@@ -296,7 +265,6 @@ class filters extends persistent {
             'casesensitive' => false,
             'tags' => false,
             'showsuggestions' => true,
-            'noselectionstring' => \get_string('user_noselectionstring', 'report_modulecompletion'),
             'placeholder' => \get_string('user_placeholder', 'report_modulecompletion'),
             'id' => 'report_modulecompletion_user_autocomplete'
         ];
@@ -314,7 +282,6 @@ class filters extends persistent {
             'casesensitive' => false,
             'tags' => false,
             'showsuggestions' => true,
-            'noselectionstring' => \get_string('cohort_noselectionstring', 'report_modulecompletion'),
             'placeholder' => \get_string('cohort_placeholder', 'report_modulecompletion'),
             'id' => 'report_modulecompletion_cohort_autocomplete'
         ];
@@ -332,7 +299,6 @@ class filters extends persistent {
             'casesensitive' => false,
             'tags' => false,
             'showsuggestions' => true,
-            'noselectionstring' => \get_string('course_noselectionstring', 'report_modulecompletion'),
             'placeholder' => \get_string('course_placeholder', 'report_modulecompletion'),
             'id' => 'report_modulecompletion_course_autocomplete'
         ];

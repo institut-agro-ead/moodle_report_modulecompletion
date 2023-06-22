@@ -35,10 +35,8 @@
     }
 }}
 <div class="report_modulecompletion_filters_list">
-  <div class="hidable-block">
-    <input type="checkbox" id="{{uniqid}}-filters-list">
-    <label class="d-flex align-items-center" for="{{uniqid}}-filters-list">{{#str}} your_filters, report_modulecompletion {{/str}}</label>
-    <hr>
+  <details open>
+    <summary>{{#str}} your_filters, report_modulecompletion {{/str}}</summary>
     <div class="hidable-content">
       <a href="?action=addfilter" class="btn btn-primary mb-3">{{#str}} add_filter, report_modulecompletion {{/str}}</a>
       {{#filters}}
@@ -59,17 +57,15 @@
       </div>
       {{/filters}}
     </div>
-  </div>
-  <div class="hidable-block mt-5">
-    <input type="checkbox" id="{{uniqid}}-instant-filter">
-    <label class="d-flex align-items-center" for="{{uniqid}}-instant-filter">{{#str}} quick_filter, report_modulecompletion {{/str}}</label>
-    <hr>
+  </details>
+  <details open class="mt-5">
+    <summary>{{#str}} quick_filter, report_modulecompletion {{/str}}</summary>
     <div class="hidable-content">
       {{#form}}
-        {{> report_modulecompletion/filter_form_inline }}
+        {{> report_modulecompletion/filter_form }}
       {{/form}}
     </div>
-  </div>
+  </details>
   <div class="modal fade" id="{{uniqid}}-delete-filter-modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

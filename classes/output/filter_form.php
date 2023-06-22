@@ -54,22 +54,7 @@ class filter_form implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
-        foreach ($this->form->get_elements_for_render() as $name => $elem) {
-            if (\get_class($elem) === 'MoodleQuickForm_hidden') {
-                $data->hidden[] = $elem->_attributes;
-            } else {
-                if ($elem->getAttributes() === null) { // This avoids a warning during rendering of groups.
-                    $elem->setAttributes([]);
-                }
-                $data->{$name} = [
-                'label' => $elem->getLabel(),
-                'element' => $elem->export_for_template($output)
-                ];
-                if ($error = $this->form->getError($name)) {
-                    $data->{$name}['error'] = $error;
-                }
-            }
-        }
+        $data->formcontent = $this->form->render();
         return $data;
     }
 

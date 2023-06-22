@@ -111,10 +111,15 @@ function report_modulecompletion_filter_form_action($filterid = null, $data = []
     }
     $customdata = [
         'persistent' => $persistent,
+        'quickfilter' => $quickfilter,
         'userid' => (int)$USER->id // For the hidden userid field.
     ];
     $customdata = array_merge($customdata, $data);
-    $filterform = new form($PAGE->url->out(false), $customdata);
+    $action = $quickfilter ? (isset($data['persistent']) ?
+        REPORT_MODULECOMPLETION_ACTION_SAVE_QUICK_FILTER : REPORT_MODULECOMPLETION_ACTION_QUICK_FILTER) :
+        ($persistent ? (REPORT_MODULECOMPLETION_ACTION_EDIT_FILTER . '&id=' . $filterid) :
+        REPORT_MODULECOMPLETION_ACTION_ADD_FILTER);
+    $filterform = new form($PAGE->url->out(false) . '?action=' . $action, $customdata);
     if ($quickfilter) { // We don't need to create/update a new filter in the DB.
         // We simply return the form.
         return $filterform;

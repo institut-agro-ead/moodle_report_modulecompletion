@@ -46,18 +46,19 @@ $string['sql_month_date_format'] = '%Y-%m';
 $string['sql_full_date_format'] = '%Y-%m-%d';
 
 // Form.
-$string['user_noselectionstring'] = 'Enter a student name';
+$string['user_label'] = 'Enter a student name';
 $string['user_placeholder'] = 'Name';
-$string['cohort_noselectionstring'] = 'Enter a cohort name';
+$string['cohort_label'] = 'Enter a cohort name';
 $string['cohort_placeholder'] = 'Name';
 $string['cohorts'] = 'Cohorts';
-$string['course_noselectionstring'] = 'Enter a course name';
+$string['course_label'] = 'Enter a course name';
 $string['course_placeholder'] = 'Name';
 
 $string['form_filter_name'] = 'Filter name';
 $string['form_filter_name_placeholder'] = 'Name';
 $string['form_save_filter'] = 'Save filter';
-$string['form_only_cohorts_courses'] = 'Only fetch courses and modules for which selected cohorts are enrolled';
+$string['form_only_cohorts_courses'] = 'Only cohorts\' courses';
+$string['form_only_cohorts_courses_help'] = 'Only fetch courses and modules for which selected cohorts are enrolled';
 $string['form_starting_date'] = 'Starting date';
 $string['form_ending_date'] = 'Ending date';
 $string['form_order_by_column'] = 'Ordered By';
