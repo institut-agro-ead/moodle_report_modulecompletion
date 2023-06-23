@@ -7,6 +7,12 @@
     margin-bottom: 1.5rem;
 }
 
+.path-admin-report-modulecompletion .report_modulecompletion_reports .hidable_content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.5s linear;
+}
+
 .path-admin-report-modulecompletion .report_modulecompletion_reports .card-block {
     padding: 1.25rem;
 }
