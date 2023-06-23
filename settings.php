@@ -94,7 +94,7 @@ if (is_array($modulesmetadata) && count($modulesmetadata) > 0) {
         ));
         foreach ($numericmetadata as $nmetaid) {
             $nmeta    = $modulesmetadata[$nmetaid];
-            $slugmeta = slug($nmeta, '_');
+            $slugmeta = report_modulecompletion_slug($nmeta, '_');
             // Numeric metadata heading.
             $metasettings->add(new admin_setting_heading('report_modulecompletion/metadata_conversion_' . $slugmeta, $nmeta, ''));
 

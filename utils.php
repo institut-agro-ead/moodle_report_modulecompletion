@@ -29,7 +29,7 @@
  * @param string $separator The separator
  * @return string The slugified string
  */
-function slug($string = '', $separator = '-') {
+function report_modulecompletion_slug($string = '', $separator = '-') {
     return strtolower(trim(preg_replace('~[^0-9a-z]+~i',
         $separator, html_entity_decode(preg_replace(
             '~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i',
@@ -43,7 +43,7 @@ function slug($string = '', $separator = '-') {
  * @param string $formula The formula to check
  * @return bool Whether the formula is valid or not
  */
-function validate_formula($formula) {
+function report_modulecompletion_validate_formula($formula) {
     if (preg_match('/^(?:[-+\/*%][(]*\d+(\.\d+)?[)]*)+/', $formula)) {
         // The regex is valid, we now check the parentheses.
         $oppos = strpos($formula, '(');

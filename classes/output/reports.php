@@ -300,10 +300,10 @@ class reports implements renderable, templatable {
         for ($i = 0; $i < count($metatotalarr); $i++) {
             $metatotal = $metatotalarr[$i];
             if (isset($metatotal['name'])) {
-                $slug = slug($metatotal['name'], '_');
+                $slug = report_modulecompletion_slug($metatotal['name'], '_');
                 $formula = trim(\get_config('report_modulecompletion', 'metadata_conversion_' . $slug . '_formula'));
                 $label = trim(\get_config('report_modulecompletion', 'metadata_conversion_' . $slug . '_label'));
-                if ($formula !== '' && validate_formula($formula) === true) {
+                if ($formula !== '' && report_modulecompletion_validate_formula($formula) === true) {
                     $counter = $metatotal['counter'];
                     $em = new \EvalMath();
                     $converted = $em->evaluate($counter . $formula);
