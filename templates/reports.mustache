@@ -66,7 +66,7 @@
     <h4>
       <span>{{name}}</span>
       {{^is_quick_filter}}
-      <a href="/report/modulecompletion/index.php?action=editfilter&id={{id}}" class="text-muted" title="{{#str}} edit_filter_title, report_modulecompletion {{/str}}">
+      <a href="{{globals.config.wwwroot}}/report/modulecompletion/index.php?action=editfilter&id={{id}}" class="text-muted" title="{{#str}} edit_filter_title, report_modulecompletion {{/str}}">
         <i class="fa fa-cog"></i>
       </a>
       {{/is_quick_filter}}
@@ -88,10 +88,10 @@
     <h5 class="text-muted">{{#str}}form_order_by_type, report_modulecompletion{{/str}} : {{order_by_type}}</h5>
     <div class="d-flex justify-content-between">
       <div class="d-inline-block">
-        <a href="/report/modulecompletion/index.php?action=export{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (CSV)</a>
-        <a href="/report/modulecompletion/index.php?action=export&type=xlsx{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (Excel)</a>
+        <a href="{{globals.config.wwwroot}}/report/modulecompletion/index.php?action=export{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (CSV)</a>
+        <a href="{{globals.config.wwwroot}}/report/modulecompletion/index.php?action=export&type=xlsx{{^is_quick_filter}}&id={{id}}{{/is_quick_filter}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (Excel)</a>
         {{#is_quick_filter}}
-          <a href="/report/modulecompletion/index.php?action=savequickfilter" class="ml-2 btn btn-primary">{{#str}} form_save_filter, report_modulecompletion {{/str}}</a>
+          <a href="{{globals.config.wwwroot}}/report/modulecompletion/index.php?action=savequickfilter" class="ml-2 btn btn-primary">{{#str}} form_save_filter, report_modulecompletion {{/str}}</a>
         {{/is_quick_filter}}
       </div>
       <button type="button" class="btn btn-outline-info show_hide_all_trigger" data-collapsed="true" data-button-text-show="{{#str}} show_all, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} hide_all, report_modulecompletion {{/str}}" data-show-all-children="true"><span>{{#str}} show_all, report_modulecompletion {{/str}}</span>&nbsp;<i class="fa fa-chevron-down"></i></button>
@@ -139,7 +139,7 @@
       {{#str}}no_reports, report_modulecompletion{{/str}}
     </div>
   {{/reports}}
-  <a href="/report/modulecompletion/index.php" class="btn btn-primary mt-3">{{#str}}backtofilters, report_modulecompletion{{/str}}</a>
+  <a href="{{globals.config.wwwroot}}/report/modulecompletion/index.php" class="btn btn-primary mt-3">{{#str}}backtofilters, report_modulecompletion{{/str}}</a>
 </div>
 
 {{#js}}

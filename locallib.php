@@ -71,12 +71,13 @@ function report_modulecompletion_get_filter($filterid) {
  * @param int $filterid The filter id
  */
 function report_modulecompletion_duplicate_filter($filterid) {
+    global $CFG;
     $persistentfilter = report_modulecompletion_get_filter($filterid);
     $persistentfilter->set('id', 0);
     $persistentfilter->set('name', $persistentfilter->get('name') . ' (' . get_string('copy', 'core') . ')');
     $persistentfilter->create();
     // We are done, so let's redirect somewhere.
-    redirect(new \moodle_url('/report/modulecompletion/index.php'));
+    redirect(new moodle_url($CFG->wwwroot . '/report/modulecompletion/index.php'));
 }
 
 /**
@@ -85,10 +86,11 @@ function report_modulecompletion_duplicate_filter($filterid) {
  * @param int $filterid The filter id
  */
 function report_modulecompletion_remove_filter($filterid) {
+    global $CFG;
     $persistentfilter = report_modulecompletion_get_filter($filterid);
     $persistentfilter->delete();
     // We are done, so let's redirect somewhere.
-    redirect(new \moodle_url('/report/modulecompletion/index.php'));
+    redirect(new moodle_url($CFG->wwwroot . '/report/modulecompletion/index.php'));
 }
 
 /**
@@ -100,18 +102,18 @@ function report_modulecompletion_remove_filter($filterid) {
  * @return form The form
  */
 function report_modulecompletion_filter_form_action($filterid = null, $data = [], $quickfilter = false) {
-    global $PAGE, $USER;
+    global $CFG, $PAGE, $USER;
     $persistent = null;
     if ($filterid) {
         $persistent = report_modulecompletion_get_filter($filterid);
     }
     $customdata = [
-        'persistent' => $persistent,
+        'persistent'  => $persistent,
         'quickfilter' => $quickfilter,
-        'userid' => (int)$USER->id // For the hidden userid field.
+        'userid'      => (int)$USER->id // For the hidden userid field.
     ];
     $customdata = array_merge($customdata, $data);
-    $action = $quickfilter ? (isset($data['persistent']) ?
+    $action     = $quickfilter ? (isset($data['persistent']) ?
         REPORT_MODULECOMPLETION_ACTION_SAVE_QUICK_FILTER : REPORT_MODULECOMPLETION_ACTION_QUICK_FILTER) :
         ($persistent ? (REPORT_MODULECOMPLETION_ACTION_EDIT_FILTER . '&id=' . $filterid) :
         REPORT_MODULECOMPLETION_ACTION_ADD_FILTER);
@@ -136,7 +138,7 @@ function report_modulecompletion_filter_form_action($filterid = null, $data = []
         }
 
         // We are done, so let's redirect somewhere.
-        redirect(new \moodle_url('/report/modulecompletion/index.php'));
+        redirect(new moodle_url($CFG->wwwroot . '/report/modulecompletion/index.php'));
     }
     return $filterform;
 }
@@ -154,7 +156,7 @@ function report_modulecompletion_search_users($search = '') {
         ' OR ' . $DB->sql_like('lastname', ':lastname', false) .
         ') AND deleted = 0 AND suspended = 0 ORDER BY lastname ASC, firstname ASC', [
             'firstname' => '%' . $search . '%',
-            'lastname' => '%' . $search . '%'
+            'lastname'  => '%' . $search . '%'
         ]);
 }
 
@@ -221,7 +223,8 @@ function report_modulecompletion_get_reports(
     $onlycohortscourses = 0,
     $courses = null,
     $startingdate = null,
-    $endingdate = null) {
+    $endingdate = null
+) {
     global $DB;
     $params = [];
     if ($users != null) {
@@ -240,20 +243,20 @@ function report_modulecompletion_get_reports(
         }
     }
     // Metadata.
-    $metaselect = '';
-    $metafrom = '';
-    $metawhere = '';
+    $metaselect  = '';
+    $metafrom    = '';
+    $metawhere   = '';
     $metagroupby = '';
-    $metaparams = [];
+    $metaparams  = [];
     if (get_config('report_modulecompletion', 'use_metadata') && $metas = get_config('report_modulecompletion', 'metadata_list')) {
-        $metaselect = ", lmdt.fieldid AS meta_id,
-      lmdt.data AS meta_data";
+        $metaselect = ', lmdt.fieldid AS meta_id,
+      lmdt.data AS meta_data';
         $metafrom = 'LEFT OUTER JOIN {local_metadata} lmdt ON cm.id = lmdt.instanceid
       LEFT OUTER JOIN {local_metadata_field} lmdtf ON lmdt.fieldid = lmdtf.id';
-        $metas = explode(',', $metas);
-        $metawhere = ' AND (lmdt.fieldid IS NULL' . str_repeat(' OR lmdt.fieldid = ?', count($metas)) . ')';
+        $metas       = explode(',', $metas);
+        $metawhere   = ' AND (lmdt.fieldid IS NULL' . str_repeat(' OR lmdt.fieldid = ?', count($metas)) . ')';
         $metagroupby = ', lmdt.fieldid';
-        $metaparams = $metas;
+        $metaparams  = $metas;
     }
     $sql = "SELECT
     cmc.id,
@@ -310,7 +313,7 @@ function report_modulecompletion_get_reports(
       AND crse_modules.course = c.id AND crse_sections.course = c.id) AS has_restrictions,
     c.fullname AS course_name,";
     if ($modules = get_config('report_modulecompletion', 'modules_list')) {
-        $list = explode(',', $modules);
+        $list     = explode(',', $modules);
         $fulllist = report_modulecompletion_get_module_types(false);
         $sql .= ' CASE';
         foreach ($list as $id) {
@@ -405,9 +408,12 @@ function report_modulecompletion_export_csv($reports = []) {
                     str_replace(['"', PHP_EOL], ['\'', ' '], $module[4]),
                     $module[5],
                 ];
-                $data = array_merge($data, array_slice($module, FIXED_NUM_COLS),
+                $data = array_merge(
+                    $data,
+                    array_slice($module, FIXED_NUM_COLS),
                     array_column($course['meta_totals'], 'counter'),
-                    array_column($report['meta_totals'], 'counter'));
+                    array_column($report['meta_totals'], 'counter')
+                );
                 $data[] = $course['completed_modules'] . ' ' . get_string('outof', 'mod_lesson', $course['total_modules']);
                 $data[] = $course['progress-bar']['progress'] . '%';
                 $data[] = $report['completed_modules'] . ' ' . get_string('outof', 'mod_lesson', $report['total_modules']);
@@ -440,8 +446,8 @@ function report_modulecompletion_export_xlsx($reports = []) {
     $headers = report_modulecompletion_get_export_headers($reports[0]);
     // Format and styling.
     $headersformat = $workbook->add_format([
-        'align' => 'center',
-        'color' => 'white',
+        'align'    => 'center',
+        'color'    => 'white',
         'bg_color' => 'teal'
     ]);
     $myxls->set_column(0, count($headers) - 1, 25);
@@ -495,8 +501,12 @@ function report_modulecompletion_export_xlsx($reports = []) {
                 $myxls->write_string($rowpos, $colpos++, $course['progress-bar']['progress'] . '%');
                 $myxls->write_string($rowpos, $colpos++, $report['completed_modules'] . ' / ' . $report['total_modules']);
                 $myxls->write_string($rowpos, $colpos++, $report['progress-bar']['progress'] . '%');
-                $myxls->write_date($rowpos, $colpos++,
-                    (new DateTime($report['most_recent_completed_module_date']))->getTimestamp(), $formatdate);
+                $myxls->write_date(
+                    $rowpos,
+                    $colpos++,
+                    (new DateTime($report['most_recent_completed_module_date']))->getTimestamp(),
+                    $formatdate
+                );
                 $rowpos++;
             }
         }
@@ -531,13 +541,17 @@ function report_modulecompletion_get_export_headers($report) {
     function prefix_totals(&$item, $key, $prefix) {
         $item = $prefix . $item;
     }
-    $course = $report['courses'][0];
+    $course            = $report['courses'][0];
     $coursemetaheaders = array_column($course['meta_totals'], 'name');
     array_walk($coursemetaheaders, 'prefix_totals', 'Total (' . get_string('course') . ') ');
     $usermetaheaders = array_column($report['meta_totals'], 'name');
     array_walk($usermetaheaders, 'prefix_totals', 'Total ');
-    $headers = array_merge($headers, array_slice($course['completions']['headers'], FIXED_NUM_COLS),
-        $coursemetaheaders, $usermetaheaders);
+    $headers = array_merge(
+        $headers,
+        array_slice($course['completions']['headers'], FIXED_NUM_COLS),
+        $coursemetaheaders,
+        $usermetaheaders
+    );
     $headers[] = get_string('course_completed_header', 'report_modulecompletion');
     $headers[] = get_string('course_completed_percent_header', 'report_modulecompletion');
     $headers[] = get_string('total_completed_header', 'report_modulecompletion');
@@ -555,7 +569,7 @@ function report_modulecompletion_get_export_headers($report) {
 function report_modulecompletion_get_module_types($withlabel = true) {
     global $DB;
     $types = $DB->get_records_sql('SELECT * FROM {modules}');
-    $ret = [];
+    $ret   = [];
     foreach ($types as $type) {
         $ret[$type->id] = $withlabel ? get_string('modulename', 'mod_' . $type->name) : $type->name;
     }

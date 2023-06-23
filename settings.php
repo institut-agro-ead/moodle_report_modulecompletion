@@ -32,8 +32,8 @@ $ADMIN->add('reports', new admin_category('modulecompletionfolder', get_string('
 $ADMIN->add('modulecompletionfolder', new admin_externalpage(
     'reportmodulecompletion',
     get_string('configmodulecompletion', 'report_modulecompletion'),
-new moodle_url('/report/modulecompletion/index.php'),
-'report/modulecompletion:view'
+    new moodle_url($CFG->wwwroot . '/report/modulecompletion/index.php'),
+    'report/modulecompletion:view'
 ));
 
 $settings = new admin_settingpage('report_modulecompletion', get_string('settings'));
@@ -41,58 +41,78 @@ $ADMIN->add('modulecompletionfolder', $settings);
 
 $types = report_modulecompletion_get_module_types();
 
-$settings->add(new admin_setting_configmulticheckbox('report_modulecompletion/modules_list',
+$settings->add(new admin_setting_configmulticheckbox(
+    'report_modulecompletion/modules_list',
     get_string('modules_list_label', 'report_modulecompletion'),
     get_string('modules_list_description', 'report_modulecompletion'),
     array_combine(array_keys($types), array_fill(0, count($types), 1)),
-    $types));
+    $types
+));
 $modulesmetadata = report_modulecompletion_get_modules_metadata();
 
 // Metadata plugin is installed and one or more module metadata exist.
 if (is_array($modulesmetadata) && count($modulesmetadata) > 0) {
-    $settings->add(new admin_setting_configcheckbox('report_modulecompletion/use_metadata',
+    $settings->add(new admin_setting_configcheckbox(
+        'report_modulecompletion/use_metadata',
         get_string('use_metadata_label', 'report_modulecompletion'),
         get_string('use_metadata_description', 'report_modulecompletion'),
-        1));
+        1
+    ));
 
-    $metasettings = new admin_settingpage('report_modulecompletion_meta_settings',
-        get_string('meta_settings', 'report_modulecompletion'));
+    $metasettings = new admin_settingpage(
+        'report_modulecompletion_meta_settings',
+        get_string('meta_settings', 'report_modulecompletion')
+    );
 
-    $metasettings->add(new admin_setting_configmulticheckbox('report_modulecompletion/metadata_list',
+    $metasettings->add(new admin_setting_configmulticheckbox(
+        'report_modulecompletion/metadata_list',
         get_string('metadata_list_label', 'report_modulecompletion'),
         get_string('metadata_list_description', 'report_modulecompletion'),
-        array_combine(array_keys($modulesmetadata),
-        array_fill(0, count($modulesmetadata), 0)),
-        $modulesmetadata));
-    $metasettings->add(new admin_setting_configmulticheckbox('report_modulecompletion/numeric_metadata_list',
+        array_combine(
+            array_keys($modulesmetadata),
+            array_fill(0, count($modulesmetadata), 0)
+        ),
+        $modulesmetadata
+    ));
+    $metasettings->add(new admin_setting_configmulticheckbox(
+        'report_modulecompletion/numeric_metadata_list',
         get_string('numeric_metadata_list_label', 'report_modulecompletion'),
         get_string('numeric_metadata_list_description', 'report_modulecompletion'),
-        array_combine(array_keys($modulesmetadata),
-        array_fill(0, count($modulesmetadata), 0)),
-        $modulesmetadata));
+        array_combine(
+            array_keys($modulesmetadata),
+            array_fill(0, count($modulesmetadata), 0)
+        ),
+        $modulesmetadata
+    ));
 
     $numericmetadata = explode(',', get_config('report_modulecompletion', 'numeric_metadata_list'));
     if (count($numericmetadata) > 0) {
-        $metasettings->add(new admin_setting_heading('report_modulecompletion/metadata_conversion',
+        $metasettings->add(new admin_setting_heading(
+            'report_modulecompletion/metadata_conversion',
             get_string('numeric_metadata_conversion', 'report_modulecompletion'),
-            get_string('numeric_metadata_conversion_description', 'report_modulecompletion')));
+            get_string('numeric_metadata_conversion_description', 'report_modulecompletion')
+        ));
         foreach ($numericmetadata as $nmetaid) {
-            $nmeta = $modulesmetadata[$nmetaid];
+            $nmeta    = $modulesmetadata[$nmetaid];
             $slugmeta = slug($nmeta, '_');
             // Numeric metadata heading.
             $metasettings->add(new admin_setting_heading('report_modulecompletion/metadata_conversion_' . $slugmeta, $nmeta, ''));
 
             // Numeric metadata formula.
-            $metasettings->add(new admin_setting_configtext('report_modulecompletion/metadata_conversion_' . $slugmeta . '_formula',
+            $metasettings->add(new admin_setting_configtext(
+                'report_modulecompletion/metadata_conversion_' . $slugmeta . '_formula',
                 $nmeta . ' ' . get_string('numeric_metadata_formula', 'report_modulecompletion'),
                 'ex: /60. ' . get_string('numeric_metadata_formula_description', 'report_modulecompletion'),
-                ''));
+                ''
+            ));
 
             // Numeric metadata label.
-            $metasettings->add(new admin_setting_configtext('report_modulecompletion/metadata_conversion_' . $slugmeta . '_label',
+            $metasettings->add(new admin_setting_configtext(
+                'report_modulecompletion/metadata_conversion_' . $slugmeta . '_label',
                 $nmeta . ' ' . get_string('numeric_metadata_label', 'report_modulecompletion'),
                 'ex: heure(s)',
-                ''));
+                ''
+            ));
         }
     }
     $ADMIN->add('modulecompletionfolder', $metasettings);

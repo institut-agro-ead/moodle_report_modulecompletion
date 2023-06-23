@@ -57,7 +57,7 @@ try {
     exit;
 }
 
-$action = optional_param('action', null, PARAM_ALPHANUM);
+$action  = optional_param('action', null, PARAM_ALPHANUM);
 $checkid = function () {
     $id = optional_param('id', null, PARAM_INT);
     if (!$id) {
@@ -109,7 +109,7 @@ switch ($action) {
     case REPORT_MODULECOMPLETION_ACTION_LOAD_FILTER:
         $id = $checkid();
         try {
-            $filter = report_modulecompletion_get_filter($id);
+            $filter  = report_modulecompletion_get_filter($id);
             $reports = report_modulecompletion_get_reports(
                 $filter->get('users'),
                 $filter->get('cohorts'),
@@ -131,7 +131,7 @@ switch ($action) {
             $filter = new filter(0, $validateddata);
             // We save it in session so we can save it later or export results with it.
             $SESSION->quick_filter = $validateddata;
-            $reports = report_modulecompletion_get_reports(
+            $reports               = report_modulecompletion_get_reports(
                 $filter->get('users'),
                 $filter->get('cohorts'),
                 $filter->get('only_cohorts_courses'),
@@ -149,10 +149,10 @@ switch ($action) {
         if (isset($SESSION->quick_filter)) {
             // We simulate a new filter to save.
             $persistent = new filter(0, $SESSION->quick_filter);
-            $form = report_modulecompletion_filter_form_action(null, ['persistent' => $persistent]);
+            $form       = report_modulecompletion_filter_form_action(null, ['persistent' => $persistent]);
             $out .= $output->render_form($form);
         } else {
-            redirect(new moodle_url('/report/modulecompletion/index.php'));
+            redirect(new moodle_url($CFG->wwwroot . '/report/modulecompletion/index.php'));
         }
         break;
     case REPORT_MODULECOMPLETION_ACTION_EXPORT:
@@ -168,12 +168,12 @@ switch ($action) {
         if (isset($SESSION->quick_filter)) {
             // We simulate a new filter to save.
             $filter = new filter(0, $SESSION->quick_filter);
-            $data = $SESSION->quick_filter;
+            $data   = $SESSION->quick_filter;
         } else {
             $id = $checkid();
             try {
                 $filter = report_modulecompletion_get_filter($id);
-                $dat = $filter->to_record();
+                $dat    = $filter->to_record();
             } catch (moodle_exception $e) {
                 $out .= $output->render_error($e->getMessage());
                 echo $out . $output->footer();
@@ -188,12 +188,12 @@ switch ($action) {
             $data->ending_date
         );
         $reportsrenderable = new reports($filter, $reports);
-        $formattedreports = $reportsrenderable->export_for_template($output)->reports;
+        $formattedreports  = $reportsrenderable->export_for_template($output)->reports;
         ('report_modulecompletion_export_' . $type)($formattedreports);
         break;
     default:
         $filters = report_modulecompletion_get_user_filters();
-        $form = report_modulecompletion_filter_form_action(null, [], true);
+        $form    = report_modulecompletion_filter_form_action(null, [], true);
         $out .= $output->render_filters_list($filters, $form);
         break;
 }
