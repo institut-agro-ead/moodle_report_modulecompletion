@@ -41,6 +41,7 @@ class filters extends persistent {
      * @return void
      */
     public function definition() {
+        global $CFG;
         $mform = $this->_form;
         // User ID.
         $mform->addElement('hidden', 'userid');
@@ -50,15 +51,31 @@ class filters extends persistent {
                 'text',
                 'name',
                 \get_string('form_filter_name', 'report_modulecompletion'),
-                ['id'             => 'report_modulecompletion_name',
-            'placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]
+                ['id' => 'report_modulecompletion_name',
+                'placeholder' => \get_string('form_filter_name_placeholder', 'report_modulecompletion')]
             );
         }
 
-        $mform->addElement('autocomplete', 'users', \get_string('user_label', 'report_modulecompletion'),
-            $this->get_users(), $this->get_user_autocomplete_options());
-        $mform->addElement('autocomplete', 'cohorts', \get_string('cohort_label', 'report_modulecompletion'),
-            $this->get_cohorts(), $this->get_cohort_autocomplete_options());
+        $mform->addElement(
+            'autocomplete',
+            'users',
+            \get_string('user_label', 'report_modulecompletion'),
+            [],
+            $this->get_user_autocomplete_options()
+        );
+
+        \MoodleQuickForm::registerElementType(
+            'report_modulecompletion_cohort',
+            "$CFG->dirroot/report/modulecompletion/classes/cohort_form_element.php",
+            'report_modulecompletion_cohort_form_element'
+        );
+        $mform->addElement(
+            'report_modulecompletion_cohort',
+            'cohorts',
+            \get_string('cohort_label', 'report_modulecompletion'),
+            ['multiple' => true]
+        );
+
         $radioarray = [];
         $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('yes'), 1);
         $radioarray[] = $mform->createElement('radio', 'only_cohorts_courses', '', \get_string('no'), 0);
@@ -67,11 +84,16 @@ class filters extends persistent {
             'only_cohorts_courses_group',
             \get_string('form_only_cohorts_courses', 'report_modulecompletion'),
             [' '],
-            false);
+            false
+        );
         $mform->addHelpButton('only_cohorts_courses_group', 'form_only_cohorts_courses', 'report_modulecompletion');
 
-        $mform->addElement('autocomplete', 'courses', \get_string('course_label', 'report_modulecompletion'),
-            $this->get_courses(), $this->get_course_autocomplete_options());
+        $mform->addElement(
+            'course',
+            'courses',
+            \get_string('course_label', 'report_modulecompletion'),
+            ['multiple' => true]
+        );
         $mform->addElement('date_selector', 'starting_date', \get_string('form_starting_date', 'report_modulecompletion'), [
             'startyear' => 2016,
             'stopyear' => \date('Y') + 2,
@@ -104,48 +126,6 @@ class filters extends persistent {
     }
 
     /**
-     * Get users list for autocomplete
-     *
-     * @return array the list of users
-     */
-    private function get_users() {
-        $users = \report_modulecompletion_search_users();
-        $ret = [];
-        foreach ($users as $user) {
-            $ret[$user->id] = $user->firstname . ' ' . strtoupper($user->lastname) . ' (' . $user->email . ')';
-        }
-        return $ret;
-    }
-
-    /**
-     * Get cohorts list for autocomplete
-     *
-     * @return array the list of cohorts
-     */
-    private function get_cohorts() {
-        $cohorts = \report_modulecompletion_search_cohorts();
-        $ret = [];
-        foreach ($cohorts as $cohort) {
-            $ret[$cohort->id] = $cohort->name;
-        }
-        return $ret;
-    }
-
-    /**
-     * Get courses list for autocomplete
-     *
-     * @return array the list of courses
-     */
-    private function get_courses() {
-        $courses = \report_modulecompletion_search_courses();
-        $ret = [];
-        foreach ($courses as $course) {
-            $ret[$course->id] = $course->fullname;
-        }
-        return $ret;
-    }
-
-    /**
      * Convert fields.
      *
      * @param stdClass $data The data.
@@ -154,9 +134,9 @@ class filters extends persistent {
     protected static function convert_fields(stdClass $data) {
         $data = parent::convert_fields($data);
 
-        $data->users = $data->users ? $data->users = \implode(',', $data->users) : '';
-        $data->courses = $data->courses ? $data->courses = \implode(',', $data->courses) : '';
-        $data->cohorts = $data->cohorts ? $data->cohorts = \implode(',', $data->cohorts) : '';
+        $data->users = $data->users ? implode(',', $data->users) : '';
+        $data->courses = $data->courses ? implode(',', $data->courses) : '';
+        $data->cohorts = $data->cohorts ? implode(',', $data->cohorts) : '';
         $data->ending_date += 86399; // Adds 23 hours, 59 minutes and 59 seconds.
 
         return $data;
@@ -169,9 +149,9 @@ class filters extends persistent {
      */
     protected function get_default_data() {
         $data = parent::get_default_data();
-        $data->users = $data->users ? \explode(',', $data->users) : [];
-        $data->cohorts = $data->cohorts ? \explode(',', $data->cohorts) : [];
-        $data->courses = $data->courses ? \explode(',', $data->courses) : [];
+        $data->users = $data->users ? explode(',', $data->users) : [];
+        $data->cohorts = $data->cohorts ? explode(',', $data->cohorts) : [];
+        $data->courses = $data->courses ? explode(',', $data->courses) : [];
         return $data;
     }
 
@@ -196,7 +176,7 @@ class filters extends persistent {
             $errors['ending_date'] = \get_string('form_missing_ending_date', 'report_modulecompletion');
         }
         $startingdate = $data->starting_date;
-        $endingdate   = $data->ending_date;
+        $endingdate = $data->ending_date;
         if (!$this->is_timestamp($startingdate)) {
             $errors['starting_date'] = \get_string('form_missing_starting_date', 'report_modulecompletion');
         }
@@ -205,36 +185,6 @@ class filters extends persistent {
         }
         if ($startingdate > $endingdate) {
             $errors['starting_date'] = \get_string('form_starting_date_must_be_anterior', 'report_modulecompletion');
-        }
-        if ($data->users != null) {
-            global $DB;
-            $arrusers               = explode(',', $data->users);
-            list($insql, $inparams) = $DB->get_in_or_equal($arrusers);
-            $sql                    = 'SELECT COUNT(*) FROM {user} WHERE id ' . $insql;
-            $count                  = $DB->count_records_sql($sql, $inparams);
-            if ($count !== count($arrusers)) {
-                $errors['users'] = \get_string('form_user_not_found', 'report_modulecompletion');
-            }
-        }
-        if ($data->cohorts != null) {
-            global $DB;
-            $arrcohorts             = explode(',', $data->cohorts);
-            list($insql, $inparams) = $DB->get_in_or_equal($arrcohorts);
-            $sql                    = 'SELECT COUNT(*) FROM {cohort} WHERE id ' . $insql;
-            $count                  = $DB->count_records_sql($sql, $inparams);
-            if ($count !== count($arrcohorts)) {
-                $errors['cohorts'] = \get_string('form_cohort_not_found', 'report_modulecompletion');
-            }
-        }
-        if ($data->courses != null) {
-            global $DB;
-            $arrcourses             = explode(',', $data->courses);
-            list($insql, $inparams) = $DB->get_in_or_equal($arrcourses);
-            $sql                    = 'SELECT COUNT(*) FROM {course} WHERE id ' . $insql;
-            $count                  = $DB->count_records_sql($sql, $inparams);
-            if ($count !== count($arrcourses)) {
-                $errors['courses'] = \get_string('form_course_not_found', 'report_modulecompletion');
-            }
         }
     }
 
@@ -260,47 +210,20 @@ class filters extends persistent {
      */
     private function get_user_autocomplete_options() {
         return [
+            'ajax' => 'core_search/form-search-user-selector',
             'multiple' => true,
-            'ajax' => 'report_modulecompletion/user_autocomplete',
-            'casesensitive' => false,
-            'tags' => false,
-            'showsuggestions' => true,
-            'placeholder' => \get_string('user_placeholder', 'report_modulecompletion'),
-            'id' => 'report_modulecompletion_user_autocomplete'
-        ];
-    }
-
-    /**
-     * Gets autocomplete’s options for 'cohorts'.
-     *
-     * @return array The options
-     */
-    private function get_cohort_autocomplete_options() {
-        return [
-            'multiple' => true,
-            'ajax' => 'report_modulecompletion/cohort_autocomplete',
-            'casesensitive' => false,
-            'tags' => false,
-            'showsuggestions' => true,
-            'placeholder' => \get_string('cohort_placeholder', 'report_modulecompletion'),
-            'id' => 'report_modulecompletion_cohort_autocomplete'
-        ];
-    }
-
-    /**
-     * Gets autocomplete’s options for 'courses'.
-     *
-     * @return array The options
-     */
-    private function get_course_autocomplete_options() {
-        return [
-            'multiple' => true,
-            'ajax' => 'report_modulecompletion/course_autocomplete',
-            'casesensitive' => false,
-            'tags' => false,
-            'showsuggestions' => true,
-            'placeholder' => \get_string('course_placeholder', 'report_modulecompletion'),
-            'id' => 'report_modulecompletion_course_autocomplete'
+            'valuehtmlcallback' => function ($value) {
+                global $DB, $OUTPUT;
+                $user = $DB->get_record('user', ['id' => (int)$value], '*', IGNORE_MISSING);
+                if (!$user || !user_can_view_profile($user)) {
+                    return false;
+                }
+                $details = user_get_user_details($user);
+                return $OUTPUT->render_from_template(
+                    'core_search/form-user-selector-suggestion',
+                    $details
+                );
+            }
         ];
     }
 }
