@@ -37,6 +37,8 @@ class report_modulecompletion_cohort_form_element extends MoodleQuickForm_cohort
      * @param string|array $value The value to set.
      * @return boolean
      */
+    // We need to ignore PHPCS here as the the method overrides its parent method which is in Moodle core, incoherent much ?
+    // phpcs:ignore
     public function setValue($value) {
         global $DB;
         $values = (array) $value;
