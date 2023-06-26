@@ -41,12 +41,11 @@ class report_modulecompletion_cohort_form_element extends MoodleQuickForm_cohort
     /**
      * Set the value of this element. If values can be added or are unknown, we will
      * make sure they exist in the options array.
+     * We need to ignore PHPCS here as the the method overrides its parent method which is in Moodle core, incoherent much ?
      * @param string|array $value The value to set.
      * @return boolean
      */
-    // We need to ignore PHPCS here as the the method overrides its parent method which is in Moodle core, incoherent much ?
-    // phpcs:ignore
-    public function setValue($value) {
+    public function setValue($value) { // phpcs:ignore
         global $DB;
         $values = (array) $value;
         $cohortstofetch = [];
