@@ -29,6 +29,13 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir . '/form/cohort.php');
 
+/**
+ * Cohort autocomplete element.
+ *
+ * @package   report_modulecompletion
+ * @copyright 2023 L’Institut Agro Enseignement à distance
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class report_modulecompletion_cohort_form_element extends MoodleQuickForm_cohort {
 
     /**
