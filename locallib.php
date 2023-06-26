@@ -438,7 +438,7 @@ function report_modulecompletion_export_xlsx($reports = []) {
     $workbook = new MoodleExcelWorkbook('-');
     // Sending HTTP headers.
     $workbook->send('export_' . time());
-    $formatdate = &$workbook->add_format();
+    $formatdate = $workbook->add_format();
     $formatdate->set_num_format(15);
     // Adding the worksheet.
     $myxls = $workbook->add_worksheet('Export ' .

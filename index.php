@@ -173,7 +173,7 @@ switch ($action) {
             $id = $checkid();
             try {
                 $filter = report_modulecompletion_get_filter($id);
-                $dat    = $filter->to_record();
+                $data    = $filter->to_record();
             } catch (moodle_exception $e) {
                 $out .= $output->render_error($e->getMessage());
                 echo $out . $output->footer();
