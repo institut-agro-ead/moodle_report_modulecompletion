@@ -33,8 +33,8 @@ function xmldb_report_modulecompletion_upgrade($oldversion) {
 
     // Adding order_by.
     if ($oldversion < 2018032800) {
-        // Define field order_by_column to be added to report_modulecompletion_filter.
-        $table = new xmldb_table('report_modulecompletion_filter');
+        // Define field order_by_column to be added to report_modulecompletion.
+        $table = new xmldb_table('report_modulecompletion');
 
         $field = new xmldb_field('order_by_column', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, 'student', 'ending_date');
         // Conditionally launch add field order_by_column.
@@ -54,8 +54,8 @@ function xmldb_report_modulecompletion_upgrade($oldversion) {
 
     // Adding cohorts field.
     if ($oldversion < 2018120500) {
-        // Define field cohorts to be added to report_modulecompletion_filter.
-        $table = new xmldb_table('report_modulecompletion_filter');
+        // Define field cohorts to be added to report_modulecompletion.
+        $table = new xmldb_table('report_modulecompletion');
 
         $field = new xmldb_field('cohorts', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
         // Conditionally launch add field cohorts.
@@ -69,8 +69,8 @@ function xmldb_report_modulecompletion_upgrade($oldversion) {
 
     // Adding cohorts field.
     if ($oldversion < 2020120800) {
-        // Define field only_cohorts_courses to be added to report_modulecompletion_filter.
-        $table = new xmldb_table('report_modulecompletion_filter');
+        // Define field only_cohorts_courses to be added to report_modulecompletion.
+        $table = new xmldb_table('report_modulecompletion');
 
         $field = new xmldb_field('only_cohorts_courses', XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, null);
         // Conditionally launch add field cohorts.

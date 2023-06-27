@@ -33,7 +33,7 @@ class filter extends persistent {
     /**
      * Name of the table.
      */
-    const TABLE = 'report_modulecompletion_filter';
+    const TABLE = 'report_modulecompletion';
 
     /**
      * Return the definition of the properties of this model.

@@ -71,7 +71,7 @@ class provider implements
         $contextlist->add_from_sql(
             'SELECT c.id
                 FROM {context} c
-                JOIN {report_modulecompletion_filter} f ON f.userid = :userid
+                JOIN {report_modulecompletion} f ON f.userid = :userid
                 WHERE contextlevel = :contextlevel',
             ['userid' => $userid, 'contextlevel' => CONTEXT_SYSTEM]
         );
@@ -91,7 +91,7 @@ class provider implements
         }
 
         $sql = 'SELECT userid
-                FROM {report_modulecompletion_filter}';
+                FROM {report_modulecompletion}';
 
         $userlist->add_from_sql('userid', $sql, []);
     }
@@ -109,7 +109,7 @@ class provider implements
         }
 
         $user = $contextlist->get_user();
-        $sql = 'SELECT * FROM {report_modulecompletion_filter} WHERE userid = ?';
+        $sql = 'SELECT * FROM {report_modulecompletion} WHERE userid = ?';
         $rs = $DB->get_recordset_sql($sql, [$user->id]);
         foreach ($rs as $record) {
             $subcontext = [get_string('pluginname', 'report_modulecompletion'), $record->name];
@@ -174,7 +174,7 @@ class provider implements
         global $DB;
         // Filters can only be defined in system context.
         if ($context->id == \context_system::instance()->id) {
-            $DB->delete_records('report_modulecompletion_filter', []);
+            $DB->delete_records('report_modulecompletion', []);
         }
     }
 
@@ -190,7 +190,7 @@ class provider implements
 
         if ($context instanceof \context_system) {
             list($usersql, $userparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
-            $DB->delete_records_select('report_modulecompletion_filter', "userid {$usersql}", $userparams);
+            $DB->delete_records_select('report_modulecompletion', "userid {$usersql}", $userparams);
         }
     }
 
@@ -206,6 +206,6 @@ class provider implements
             return;
         }
 
-        $DB->delete_records('report_modulecompletion_filter', ['userid' => $contextlist->get_user()->id]);
+        $DB->delete_records('report_modulecompletion', ['userid' => $contextlist->get_user()->id]);
     }
 }
