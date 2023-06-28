@@ -335,7 +335,9 @@ function report_modulecompletion_get_reports(
     JOIN {course_sections} cs ON cm.section = cs.id
     JOIN {context} cc ON cc.instanceid = c.id AND cc.contextlevel = 50
     JOIN {modules} m ON cm.module = m.id
-    JOIN {role_assignments} asg ON u.id = asg.userid AND asg.contextid = cc.id ';
+    JOIN {role_assignments} asg ON u.id = asg.userid AND asg.contextid = cc.id
+    JOIN {role_capabilities} rc ON asg.roleid = rc.roleid
+    JOIN {capabilities} cap ON rc.capability = cap.name ';
     $sql .= $metafrom;
     $sql .= ' WHERE ';
     if ($modules = get_config('report_modulecompletion', 'modules_list')) {
@@ -343,7 +345,9 @@ function report_modulecompletion_get_reports(
         $sql .= 'm.id ' . $inmodsql . ' AND ';
         $params = array_merge($params, $inmodparams);
     }
-    $sql .= 'asg.roleid = 5
+    $sql .= 'rc.capability = ? ';
+    $params[] = 'moodle/course:isincompletionreports';
+    $sql .= 'AND rc.permission = 1
     AND u.deleted = 0
     AND u.suspended = 0
     AND cm.visible = 1
