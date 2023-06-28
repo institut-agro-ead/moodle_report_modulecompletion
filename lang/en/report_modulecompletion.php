@@ -42,8 +42,8 @@ $string['numeric_metadata_formula_description'] = 'If the formula is incorrect, 
 $string['numeric_metadata_label'] = '(Label)';
 
 // Sql formats.
-$string['sql_month_date_format'] = '%Y-%m';
-$string['sql_full_date_format'] = '%Y-%m-%d';
+$string['month_date_format'] = 'Y-m';
+$string['full_date_format'] = 'Y-m-d';
 
 // Form.
 $string['user_label'] = 'Enter a student name';

@@ -260,9 +260,7 @@ function report_modulecompletion_get_reports(
     }
     $sql = "SELECT
     cmc.id,
-    DATE_FORMAT(FROM_UNIXTIME(cmc.timemodified), '" .
-    get_string('sql_month_date_format', 'report_modulecompletion') .
-    "') AS month,
+    cmc.timemodified AS month,
     u.id AS user_id,
     c.id AS course_id,
     c.fullname AS course_name,
@@ -271,6 +269,7 @@ function report_modulecompletion_get_reports(
     UPPER(u.lastname) AS last_name,
     u.firstname AS first_name,
     u.email AS email,
+    cm.instance,
     (SELECT COUNT(DISTINCT cmod.id)
       FROM {modules} mods
       JOIN {course_modules} cmod ON mods.id = cmod.module
@@ -324,8 +323,7 @@ function report_modulecompletion_get_reports(
         }
         $sql .= ' END AS module,';
     }
-    $sql .= "DATE_FORMAT(FROM_UNIXTIME(cmc.timemodified), '" .
-    get_string('sql_full_date_format', 'report_modulecompletion') . "') AS completed_on";
+    $sql .= 'cmc.timemodified AS completed_on';
     $sql .= $metaselect;
     $sql .= ' FROM {course_modules_completion} cmc
     JOIN {user} u ON cmc.userid = u.id
@@ -377,9 +375,10 @@ function report_modulecompletion_get_reports(
         $sql .= ' AND c.id ' . $insqlcourses;
         $params = array_merge($params, $inparamscourses);
     }
-    $sql .= ' GROUP BY cmc.id, cmc.timemodified, u.lastname, u.firstname, c.fullname';
+    $sql .= ' GROUP BY cmc.id, cmc.timemodified, u.id, c.id, cs.name, m.name,
+        cm.module, cm.instance, u.lastname, u.firstname, c.fullname';
     $sql .= $metagroupby;
-    $sql .= " ORDER BY DATE_FORMAT(FROM_UNIXTIME(cmc.timemodified), '%Y-%m-%d') DESC, u.lastname ASC";
+    $sql .= " ORDER BY cmc.timemodified DESC, u.lastname ASC";
     return $DB->get_recordset_sql($sql, $params);
 }
 
@@ -442,7 +441,7 @@ function report_modulecompletion_export_xlsx($reports = []) {
     $formatdate->set_num_format(15);
     // Adding the worksheet.
     $myxls = $workbook->add_worksheet('Export ' .
-        date(\str_replace('%', '', get_string('sql_full_date_format', 'report_modulecompletion'))));
+        date(get_string('full_date_format', 'report_modulecompletion')));
     $headers = report_modulecompletion_get_export_headers($reports[0]);
     // Format and styling.
     $headersformat = $workbook->add_format([
@@ -584,8 +583,7 @@ function report_modulecompletion_get_module_types($withlabel = true) {
  */
 function report_modulecompletion_get_modules_metadata($asobject = false) {
     global $DB;
-    $metadataexists = count($DB->get_records_sql("SHOW TABLES LIKE '{local_metadata}'")) > 0;
-    if ($metadataexists) {
+    if ($DB->get_manager()->table_exists('local_metadata')) {
         $metas = $DB->get_records_sql('SELECT * FROM {local_metadata_field} WHERE contextlevel = 70');
         if ($asobject) {
             return $metas;

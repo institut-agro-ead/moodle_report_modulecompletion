@@ -74,8 +74,8 @@ class reports implements renderable, templatable {
         if (\get_config('report_modulecompletion', 'use_metadata') &&
             $selectedmetas = \get_config('report_modulecompletion', 'metadata_list')) {
             $this->metas = \report_modulecompletion_get_modules_metadata(true);
-            $this->selected_metas = explode(',', $selectedmetas);
-            $this->numeric_metas = explode(',', \get_config('report_modulecompletion', 'numeric_metadata_list'));
+            $this->selectedmetas = explode(',', $selectedmetas);
+            $this->numericmetas = explode(',', \get_config('report_modulecompletion', 'numeric_metadata_list'));
         }
     }
 
@@ -97,8 +97,8 @@ class reports implements renderable, templatable {
             'courses' => [],
             'meta_totals' => []
         ];
-        if ($this->numeric_metas) {
-            foreach ($this->numeric_metas as $metaid) {
+        if ($this->numericmetas) {
+            foreach ($this->numericmetas as $metaid) {
                 $userinfos['meta_totals'][$metaid] = [
                     'name' => \ucwords($this->metas[$metaid]->name),
                     'counter' => '0'
@@ -135,13 +135,13 @@ class reports implements renderable, templatable {
                 'rows' => []
             ]
         ];
-        if ($this->selected_metas) {
-            foreach ($this->selected_metas as $metaid) {
+        if ($this->selectedmetas) {
+            foreach ($this->selectedmetas as $metaid) {
                 $courseinfos['completions']['headers'][] = \ucwords($this->metas[$metaid]->name);
             }
         }
-        if ($this->numeric_metas) {
-            foreach ($this->numeric_metas as $metaid) {
+        if ($this->numericmetas) {
+            foreach ($this->numericmetas as $metaid) {
                 $courseinfos['meta_totals'][$metaid] = [
                     'name' => \ucwords($this->metas[$metaid]->name),
                     'counter' => '0'
@@ -178,7 +178,7 @@ class reports implements renderable, templatable {
         $coursecontext = \context_course::instance($report->course_id);
         $userenrolled = is_enrolled($coursecontext, $USER->id, '', true);
         return [
-            $report->month,
+            gmdate(\get_string('month_date_format', 'report_modulecompletion'), $report->month),
             $userenrolled ? \html_writer::link(
                 new \moodle_url('/course/view.php', ['id' => $report->course_id]),
                 $report->course_name,
@@ -187,7 +187,7 @@ class reports implements renderable, templatable {
             $report->section_name ?: 'N/A',
             \get_string('modulename', 'mod_' . $report->module_type),
             $report->module,
-            $report->completed_on
+            gmdate(\get_string('full_date_format', 'report_modulecompletion'), $report->completed_on)
         ];
     }
 
@@ -205,7 +205,7 @@ class reports implements renderable, templatable {
             case 'datetime':
                 $date = new \DateTime('@' . $value);
                 $date->setTimezone(core_date::get_server_timezone_object());
-                $value = $date->format(\str_replace('%', '', \get_string('sql_full_date_format', 'report_modulecompletion')));
+                $value = $date->format(\get_string('full_date_format', 'report_modulecompletion'));
             break;
             case 'checkbox':
                 $value = \get_string($value ? 'yes' : 'no');
@@ -250,14 +250,6 @@ class reports implements renderable, templatable {
         uasort($reports, function ($a, $b) use ($column, $direction) {
             $v1 = $a[$column];
             $v2 = $b[$column];
-            if ($column === 'most_recent_completed_module_date') {
-                $v1 = \DateTime::createFromFormat(
-                    \str_replace('%', '', \get_string('sql_full_date_format', 'report_modulecompletion')),
-                    $v1);
-                $v2 = \DateTime::createFromFormat(
-                    \str_replace('%', '', \get_string('sql_full_date_format', 'report_modulecompletion')),
-                    $v2);
-            }
             if ($v1 === $v2) {
                 return 0;
             }
@@ -354,16 +346,8 @@ class reports implements renderable, templatable {
         $data->filter = [
             'id' => $this->filter->get('id'),
             'name' => $this->filter->get('name'),
-            'starting_date' => $startingdate->format(\str_replace(
-                '%',
-                '',
-                \get_string('sql_full_date_format', 'report_modulecompletion')
-            )),
-            'ending_date' => $endingdate->format(\str_replace(
-                '%',
-                '',
-                \get_string('sql_full_date_format', 'report_modulecompletion')
-            )),
+            'starting_date' => $startingdate->format(\get_string('full_date_format', 'report_modulecompletion')),
+            'ending_date' => $endingdate->format(\get_string('full_date_format', 'report_modulecompletion')),
             'order_by_column' => \get_string('form_order_by_' . $this->filter->get('order_by_column'), 'report_modulecompletion'),
             'order_by_type' => \get_string('form_order_by_' . $this->filter->get('order_by_type'), 'report_modulecompletion')
         ];
@@ -383,13 +367,7 @@ class reports implements renderable, templatable {
                 $data->reports[$report->user_id] = $this->build_user_infos($report);
             }
             // If the completion date is more recent for this module we replace the old one for the user.
-            $oldcompletiondate = \DateTime::createFromFormat(
-                \str_replace('%', '', \get_string('sql_full_date_format', 'report_modulecompletion')),
-                $data->reports[$report->user_id]['most_recent_completed_module_date']);
-            $newcompletiondate = \DateTime::createFromFormat(
-                \str_replace('%', '', \get_string('sql_full_date_format', 'report_modulecompletion')),
-                $report->completed_on);
-            if ($newcompletiondate > $oldcompletiondate) {
+            if ($report->completed_on > $data->reports[$report->user_id]['most_recent_completed_module_date']) {
                 $data->reports[$report->user_id]['most_recent_completed_module_date'] = $report->completed_on;
             }
 
@@ -405,7 +383,7 @@ class reports implements renderable, templatable {
                 $data->reports[$report->user_id]['completed_modules']++;
                 $data->reports[$report->user_id]['courses'][$report->course_id]['completed_modules']++;
                 // Metadata is numeric, we increment the total counters (user and course).
-                if ($this->selected_metas && $this->numeric_metas &&
+                if ($this->selectedmetas && $this->numericmetas &&
                     isset($data->reports[$report->user_id]['meta_totals'][$report->meta_id]) && $report->meta_data !== null) {
                     $data->reports[$report->user_id]['meta_totals'][$report->meta_id]['counter'] += (float) $report->meta_data;
                     $data->reports[$report->user_id]['courses'][$report->course_id]['meta_totals'][$report->meta_id]['counter'] +=
@@ -413,7 +391,7 @@ class reports implements renderable, templatable {
                 }
             }
             // Appends metadata if there is any.
-            if ($this->selected_metas) {
+            if ($this->selectedmetas) {
                 $data->reports[$report->user_id]['courses'][$report->course_id]['completions']['rows'][$report->id][] =
                     $report->meta_id ?
                         $this->convert_metadata($report->meta_id, $report->meta_data) : '';
@@ -425,16 +403,18 @@ class reports implements renderable, templatable {
             $this->sort_courses($report['courses']);
             $report['meta_totals'] = $this->get_converted_numeric_metadata(array_values($report['meta_totals']));
             $report['courses'] = array_values($report['courses']);
+            $report['most_recent_completed_module_date'] = gmdate(\get_string('full_date_format', 'report_modulecompletion'),
+                $report['most_recent_completed_module_date']);
             foreach ($report['courses'] as &$course) {
                 $course['meta_totals'] = $this->get_converted_numeric_metadata(array_values($course['meta_totals']));
                 $course['completions']['rows'] = array_values($course['completions']['rows']);
                 // If metadata is null we fill the rest of the columns of the row.
-                if ($this->selected_metas) {
+                if ($this->selectedmetas) {
                     foreach ($course['completions']['rows'] as &$row) {
-                        if (count($row) !== (\FIXED_NUM_COLS + count($this->selected_metas))) {
+                        if (count($row) !== (\FIXED_NUM_COLS + count($this->selectedmetas))) {
                             $row = array_merge(
                                 $row,
-                                array_fill(\FIXED_NUM_COLS, (\FIXED_NUM_COLS + count($this->selected_metas) - count($row)), ''));
+                                array_fill(\FIXED_NUM_COLS, (\FIXED_NUM_COLS + count($this->selectedmetas) - count($row)), ''));
                         }
                     }
                 }
