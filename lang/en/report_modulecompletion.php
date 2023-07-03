@@ -126,3 +126,10 @@ $string['total_completed_percent_header'] = 'Total in percentage';
 
 // Privacy.
 $string['privacy:metadata'] = 'The ModuleCompletion plugin does not store any personal data.';
+
+// Events.
+$string['reportviewed'] = 'Report viewed';
+$string['reportcreated'] = 'Report created';
+$string['reportupdated'] = 'Report updated';
+$string['reportdeleted'] = 'Report deleted';
+

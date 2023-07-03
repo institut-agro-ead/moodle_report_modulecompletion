@@ -28,6 +28,7 @@ require_once($CFG->dirroot . '/report/modulecompletion/locallib.php');
 
 use report_modulecompletion\persistents\filter;
 use report_modulecompletion\output\reports;
+use report_modulecompletion\event\report_viewed;
 use core\output\mustache_template_finder;
 
 require_login();
@@ -119,6 +120,8 @@ switch ($action) {
                 $filter->get('ending_date')
             );
             $out .= $output->render_reports($filter, $reports);
+            // Trigger report viewed event.
+            report_viewed::create_from_object($filter)->trigger();
         } catch (moodle_exception $e) {
             $out .= $output->render_error($e->getMessage());
         }

@@ -20,6 +20,9 @@ namespace report_modulecompletion\persistents;
 use core\persistent;
 use core_user;
 use lang_string;
+use report_modulecompletion\event\report_created;
+use report_modulecompletion\event\report_updated;
+use report_modulecompletion\event\report_deleted;
 
 /**
  * DB storage managment for filters
@@ -112,5 +115,36 @@ class filter extends persistent {
             return new lang_string('invaliduserid', 'error');
         }
         return true;
+    }
+
+    /**
+     * Trigger report created event when persistent is created
+     */
+    protected function after_create(): void {
+        report_created::create_from_object($this)->trigger();
+    }
+
+    /**
+     * Throw report deleted event when persistent is deleted
+     *
+     * @param bool $result
+     */
+    protected function after_delete($result): void {
+        if (!$result) {
+            return;
+        }
+        report_deleted::create_from_object($this)->trigger();
+    }
+
+    /**
+     * Throw report updated event when persistent is updated
+     *
+     * @param bool $result
+     */
+    protected function after_update($result): void {
+        if (!$result) {
+            return;
+        }
+        report_updated::create_from_object($this)->trigger();
     }
 }
