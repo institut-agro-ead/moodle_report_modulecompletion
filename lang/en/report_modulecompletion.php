@@ -125,7 +125,17 @@ $string['total_completed_header'] = 'Total modules completed';
 $string['total_completed_percent_header'] = 'Total in percentage';
 
 // Privacy.
-$string['privacy:metadata'] = 'The ModuleCompletion plugin does not store any personal data.';
+$string['privacy:metadata:filter'] = 'The ModuleCompletion plugin stores information about filters created by users so they can track students\' achievements.';
+$string['privacy:metadata:filter:userid'] = 'The ID of the user who created the filter.';
+$string['privacy:metadata:filter:name'] = 'The name of the filter.';
+$string['privacy:metadata:filter:users'] = 'The ID of users for whom achievements should be tracked.';
+$string['privacy:metadata:filter:cohorts'] = 'The ID of cohorts for which achievements should be tracked.';
+$string['privacy:metadata:filter:only_cohorts_courses'] = 'Whether or not fetched courses and modules should only be associated with selected cohorts.';
+$string['privacy:metadata:filter:courses'] = 'The ID of cohorts for which achievements should be tracked.';
+$string['privacy:metadata:filter:starting_date'] = 'The starting date for the period the user wishes to track.';
+$string['privacy:metadata:filter:ending_date'] = 'The ending date for the period the user wishes to track.';
+$string['privacy:metadata:filter:order_by_column'] = 'The criteria for sorting the results.';
+$string['privacy:metadata:filter:order_by_type'] = 'The sorting order for the results.';
 
 // Events.
 $string['reportviewed'] = 'Report viewed';
