@@ -12,7 +12,7 @@ Either download the package from the Moodle plugins repository page or from the 
 
 Once installed, you will have to choose which modules/activities you would like to track on your platform; by default, all modules will be checked. **Keep in mind that you will need to come back to the settings page and check any module/activity you might install in the future and want to track.**
 
-**In order to be accessible by whomever needs access, administrators will have to add the `report/modulecompletion:view` capability to role(s). In addition, they will need to be able to access users details (`moodle/user:viewdetails`), see cohorts (`moodle/cohort:view`) and see courses (`moodle/category:viewcourselist`). These capabilities are required to use students, cohorts and courses filters.**
+**In order to be accessible by whomever needs access, administrators will have to add the `report/modulecompletion:view` capability to role(s). In addition, they will need to be able to access site administration (`moodle/site:configview`, that won’t give them access to the whole administration don’t worry), users details (`moodle/user:viewdetails`), see cohorts (`moodle/cohort:view`) and see courses (`moodle/category:viewcourselist`). These capabilities are required to use students, cohorts and courses filters.**
 
 
 Users with access will then be able to use the plugin via **Site administration** > **Reports** > **Tracking module completion (under “Module reports” category)**
