@@ -351,7 +351,7 @@ function report_modulecompletion_get_reports(
     AND u.deleted = 0
     AND u.suspended = 0
     AND cm.visible = 1
-    AND cmc.completionstate = 1';
+    AND (cmc.completionstate = ' . COMPLETION_COMPLETE . ' OR cmc.completionstate = ' . COMPLETION_COMPLETE_PASS . ')';
     $sql .= $metawhere;
     $params = array_merge($params, $metaparams);
     if ($startingdate) {
