@@ -54,13 +54,13 @@ class provider implements
             'starting_date' => 'privacy:metadata:filter:starting_date',
             'ending_date' => 'privacy:metadata:filter:ending_date',
             'order_by_column' => 'privacy:metadata:filter:order_by_column',
-            'order_by_type' => '/* In the provided PHP code, the `privacy:metadata` is used as a key to
+            'order_by_type' => '/* In the provided PHP code, the \'privacy:metadata\' is used as a key to
             define metadata fields related to privacy within the
-            `report_modulecompletion` component. These metadata fields are used
-            to describe the data stored in the `filter` table and provide
-            information about the fields such as `userid`, `name`, `users`,
-            `cohorts`, `courses`, `starting_date`, `ending_date`,
-            `order_by_column`, and `order_by_type`. */
+            \'report_modulecompletion\' component. These metadata fields are used
+            to describe the data stored in the \'filter\' table and provide
+            information about the fields such as \'userid\', \'name\', \'users\',
+            \'cohorts\', \'courses\', \'starting_date\', \'ending_date\',
+            \'order_by_column\', and \'order_by_type\'. */
             privacy:metadata:filter:order_by_type',
         ], 'privacy:metadata:filter');
 
