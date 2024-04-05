@@ -95,13 +95,13 @@ class filters extends persistent {
             ['multiple' => true]
         );
         $mform->addElement('date_selector', 'starting_date', \get_string('form_starting_date', 'report_modulecompletion'), [
-            'startyear' => 2016,
+            'startyear' => \date('Y') - 2,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_user_timezone_object()
         ]);
 
         $mform->addElement('date_selector', 'ending_date', \get_string('form_ending_date', 'report_modulecompletion'), [
-            'startyear' => 2016,
+            'startyear' => \date('Y') - 2,
             'stopyear' => \date('Y') + 2,
             'timezone' => core_date::get_user_timezone_object()
         ]);
