@@ -137,7 +137,14 @@ class filters extends persistent {
         $data->users = $data->users ? implode(',', $data->users) : '';
         $data->courses = $data->courses ? implode(',', $data->courses) : '';
         $data->cohorts = $data->cohorts ? implode(',', $data->cohorts) : '';
-        $data->ending_date += 86399; // Adds 23 hours, 59 minutes and 59 seconds.
+
+        // This insures that we get all achievements that happened during the whole day for the selected ending date.
+        // Adding 86399 seconds to the timestamp is not enough in case the ending date happens to coincide with start/end of
+        // daylight saving time.
+        $enddate        = new \DateTime('now', core_date::get_user_timezone_object());
+        $enddate->setTimestamp($data->ending_date);
+        $enddate->setTime(23, 59, 59, 59);
+        $data->ending_date = $enddate->getTimestamp();
 
         return $data;
     }
