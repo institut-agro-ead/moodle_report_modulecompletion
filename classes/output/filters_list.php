@@ -56,7 +56,7 @@ class filters_list implements renderable, templatable {
         foreach ($this->filters as $filter) {
             $data->filters[] = [
             'id' => $filter->get('id'),
-            'name' => $filter->get('name')
+            'name' => $filter->get('name'),
             ];
         }
         $data->sesskey = sesskey(); // For filter removal.

@@ -53,41 +53,41 @@ class filter extends persistent {
             ],
             'users' => [
                 'type' => PARAM_RAW,
-                'null' => NULL_ALLOWED
+                'null' => NULL_ALLOWED,
             ],
             'cohorts' => [
                 'type' => PARAM_RAW,
-                'null' => NULL_ALLOWED
+                'null' => NULL_ALLOWED,
             ],
             'only_cohorts_courses' => [
                 'type' => PARAM_INT,
                 'default' => 0,
-                'choices' => [0, 1]
+                'choices' => [0, 1],
             ],
             'courses' => [
                 'type' => PARAM_RAW,
-                'null' => NULL_ALLOWED
+                'null' => NULL_ALLOWED,
             ],
             'starting_date' => [
                 'type' => PARAM_INT,
                 'default' => function () {
                     return \time();
-                }
+                },
             ],
             'ending_date' => [
                 'type' => PARAM_INT,
                 'default' => function () {
                     return \time();
-                }
+                },
             ],
             'order_by_column' => [
                 'type' => PARAM_RAW,
-                'choices' => ['student', 'completion', 'last_completed']
+                'choices' => ['student', 'completion', 'last_completed'],
             ],
             'order_by_type' => [
                 'type' => PARAM_RAW,
-                'choices' => ['asc', 'desc']
-            ]
+                'choices' => ['asc', 'desc'],
+            ],
         ];
     }
 

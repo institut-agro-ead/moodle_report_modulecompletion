@@ -81,8 +81,8 @@ class report_deleted extends base {
                     'report_modulecompletion'),
                     'order_by_type' => get_string('form_order_by_' . $report->get('order_by_type'),
                     'report_modulecompletion'),
-                ]
-            ]
+                ],
+            ],
         ];
         $event = self::create($eventparams);
         $event->add_record_snapshot($event->objecttable, $report->to_record());

@@ -97,13 +97,13 @@ class filters extends persistent {
         $mform->addElement('date_selector', 'starting_date', \get_string('form_starting_date', 'report_modulecompletion'), [
             'startyear' => \date('Y') - 2,
             'stopyear' => \date('Y') + 2,
-            'timezone' => core_date::get_user_timezone_object()
+            'timezone' => core_date::get_user_timezone_object(),
         ]);
 
         $mform->addElement('date_selector', 'ending_date', \get_string('form_ending_date', 'report_modulecompletion'), [
             'startyear' => \date('Y') - 2,
             'stopyear' => \date('Y') + 2,
-            'timezone' => core_date::get_user_timezone_object()
+            'timezone' => core_date::get_user_timezone_object(),
         ]);
         $orderby = $mform->addElement('select', 'order_by_column', \get_string('form_order_by_column', 'report_modulecompletion'), [
             'student' => \get_string('form_order_by_student', 'report_modulecompletion'),
@@ -230,7 +230,7 @@ class filters extends persistent {
                     'core_search/form-user-selector-suggestion',
                     $details
                 );
-            }
+            },
         ];
     }
 }

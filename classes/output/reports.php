@@ -95,13 +95,13 @@ class reports implements renderable, templatable {
             'most_recent_completed_module_date' => $report->completed_on,
             'total_modules' => $report->total_modules,
             'courses' => [],
-            'meta_totals' => []
+            'meta_totals' => [],
         ];
         if ($this->numericmetas) {
             foreach ($this->numericmetas as $metaid) {
                 $userinfos['meta_totals'][$metaid] = [
                     'name' => \ucwords($this->metas[$metaid]->name),
-                    'counter' => '0'
+                    'counter' => '0',
                 ];
             }
         }
@@ -132,8 +132,8 @@ class reports implements renderable, templatable {
             'meta_totals' => [],
             'completions' => [
                 'headers' => $this->get_headers(),
-                'rows' => []
-            ]
+                'rows' => [],
+            ],
         ];
         if ($this->selectedmetas) {
             foreach ($this->selectedmetas as $metaid) {
@@ -144,7 +144,7 @@ class reports implements renderable, templatable {
             foreach ($this->numericmetas as $metaid) {
                 $courseinfos['meta_totals'][$metaid] = [
                     'name' => \ucwords($this->metas[$metaid]->name),
-                    'counter' => '0'
+                    'counter' => '0',
                 ];
             }
         }
@@ -187,7 +187,7 @@ class reports implements renderable, templatable {
             $report->section_name ?: 'N/A',
             \get_string('modulename', 'mod_' . $report->module_type),
             $report->module,
-            gmdate(\get_string('full_date_format', 'report_modulecompletion'), $report->completed_on)
+            gmdate(\get_string('full_date_format', 'report_modulecompletion'), $report->completed_on),
         ];
     }
 
@@ -223,7 +223,7 @@ class reports implements renderable, templatable {
         array_walk($reports, function (&$report, $index) {
             $report['progress-bar'] = [
             'progress' => \round(($report['completed_modules'] * 100) / $report['total_modules']),
-            'hasprogress' => true
+            'hasprogress' => true,
             ];
             if (isset($report['courses'])) {
                 $this->set_progress($report['courses']);
@@ -318,12 +318,12 @@ class reports implements renderable, templatable {
             if (!isset($ret[$c->cohort_id])) {
                 $ret[$c->cohort_id] = [
                     'name' => $c->cohort_name,
-                    'users' => []
+                    'users' => [],
                 ];
             }
             $ret[$c->cohort_id]['users'][] = [
                 'firstname' => $c->user_fn,
-                'lastname' => $c->user_ln
+                'lastname' => $c->user_ln,
             ];
         }
         return array_values($ret);
@@ -349,7 +349,7 @@ class reports implements renderable, templatable {
             'starting_date' => $startingdate->format(\get_string('full_date_format', 'report_modulecompletion')),
             'ending_date' => $endingdate->format(\get_string('full_date_format', 'report_modulecompletion')),
             'order_by_column' => \get_string('form_order_by_' . $this->filter->get('order_by_column'), 'report_modulecompletion'),
-            'order_by_type' => \get_string('form_order_by_' . $this->filter->get('order_by_type'), 'report_modulecompletion')
+            'order_by_type' => \get_string('form_order_by_' . $this->filter->get('order_by_type'), 'report_modulecompletion'),
         ];
         if ($this->filter->get('cohorts')) {
             $data->filter['cohorts'] = $this->set_cohorts($this->filter->get('cohorts'));

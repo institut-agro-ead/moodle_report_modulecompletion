@@ -25,11 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-  'report/modulecompletion:view' => array(
+$capabilities = [
+  'report/modulecompletion:view' => [
     'riskbitmask' => RISK_PERSONAL,
     'captype' => 'read',
     'contextlevel' => CONTEXT_SYSTEM,
-    'archetypes' => array()
-  ),
-);
+    'archetypes' => [],
+  ],
+];

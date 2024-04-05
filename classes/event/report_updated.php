@@ -64,25 +64,25 @@ class report_updated extends base {
      */
     public static function create_from_object(filter $report): self {
         $eventparams = [
-        'context'  => context_system::instance(),
-        'objectid' => $report->get('id'),
-        'other' => [
-            'name'     => $report->get('name'),
-            'filters'   => [
-                'userids' => $report->get('users'),
-                'cohortids' => $report->get('cohorts'),
-                'courseids' => $report->get('courses'),
-                'only_cohorts_courses' => !!$report->get('only_cohorts_courses'),
-                'starting_date' => userdate($report->get('starting_date'), get_string('strftimedatemonthabbr',
-                'core_langconfig')),
-                'ending_date' => userdate($report->get('ending_date'), get_string('strftimedatemonthabbr',
-                'core_langconfig')),
-                'order_by_column' => get_string('form_order_by_' . $report->get('order_by_column'),
-                'report_modulecompletion'),
-                'order_by_type' => get_string('form_order_by_' . $report->get('order_by_type'),
-                'report_modulecompletion'),
-            ]
-        ]
+            'context'  => context_system::instance(),
+            'objectid' => $report->get('id'),
+            'other' => [
+                'name'     => $report->get('name'),
+                'filters'   => [
+                    'userids' => $report->get('users'),
+                    'cohortids' => $report->get('cohorts'),
+                    'courseids' => $report->get('courses'),
+                    'only_cohorts_courses' => !!$report->get('only_cohorts_courses'),
+                    'starting_date' => userdate($report->get('starting_date'), get_string('strftimedatemonthabbr',
+                    'core_langconfig')),
+                    'ending_date' => userdate($report->get('ending_date'), get_string('strftimedatemonthabbr',
+                    'core_langconfig')),
+                    'order_by_column' => get_string('form_order_by_' . $report->get('order_by_column'),
+                    'report_modulecompletion'),
+                    'order_by_type' => get_string('form_order_by_' . $report->get('order_by_type'),
+                    'report_modulecompletion'),
+                ],
+            ],
         ];
         $event = self::create($eventparams);
         $event->add_record_snapshot($event->objecttable, $report->to_record());

@@ -110,7 +110,7 @@ function report_modulecompletion_filter_form_action($filterid = null, $data = []
     $customdata = [
         'persistent'  => $persistent,
         'quickfilter' => $quickfilter,
-        'userid'      => (int)$USER->id // For the hidden userid field.
+        'userid'      => (int)$USER->id, // For the hidden userid field.
     ];
     $customdata = array_merge($customdata, $data);
     $action     = $quickfilter ? (isset($data['persistent']) ?
@@ -156,7 +156,7 @@ function report_modulecompletion_search_users($search = '') {
         ' OR ' . $DB->sql_like('lastname', ':lastname', false) .
         ') AND deleted = 0 AND suspended = 0 ORDER BY lastname ASC, firstname ASC', [
             'firstname' => '%' . $search . '%',
-            'lastname'  => '%' . $search . '%'
+            'lastname'  => '%' . $search . '%',
         ]);
 }
 
@@ -171,7 +171,7 @@ function report_modulecompletion_search_cohorts($search = '') {
     return $DB->get_records_sql('SELECT * FROM {cohort}  WHERE ' .
         $DB->sql_like('name', ':name', false) .
         ' ORDER BY name ASC', [
-            'name' => '%' . $search . '%'
+            'name' => '%' . $search . '%',
         ]);
 }
 
@@ -186,7 +186,7 @@ function report_modulecompletion_search_courses($search = '') {
     return $DB->get_records_sql('SELECT * FROM {course}  WHERE ' .
         $DB->sql_like('fullname', ':fullname', false) .
         ' ORDER BY fullname ASC', [
-            'fullname' => '%' . $search . '%'
+            'fullname' => '%' . $search . '%',
         ]);
 }
 
@@ -451,7 +451,7 @@ function report_modulecompletion_export_xlsx($reports = []) {
     $headersformat = $workbook->add_format([
         'align'    => 'center',
         'color'    => 'white',
-        'bg_color' => 'teal'
+        'bg_color' => 'teal',
     ]);
     $myxls->set_column(0, count($headers) - 1, 25);
     $myxls->set_row(0, null, $headersformat);
@@ -532,7 +532,7 @@ function report_modulecompletion_get_export_headers($report) {
         get_string('section_header', 'report_modulecompletion'),
         get_string('module_type_header', 'report_modulecompletion'),
         get_string('module_header', 'report_modulecompletion'),
-        get_string('completed_header', 'report_modulecompletion')
+        get_string('completed_header', 'report_modulecompletion'),
     ];
     /**
      * Prefixes 'Total' in headers.

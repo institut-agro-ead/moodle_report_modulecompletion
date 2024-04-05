@@ -54,7 +54,14 @@ class provider implements
             'starting_date' => 'privacy:metadata:filter:starting_date',
             'ending_date' => 'privacy:metadata:filter:ending_date',
             'order_by_column' => 'privacy:metadata:filter:order_by_column',
-            'order_by_type' => 'privacy:metadata:filter:order_by_type',
+            'order_by_type' => '/* In the provided PHP code, the `privacy:metadata` is used as a key to
+            define metadata fields related to privacy within the
+            `report_modulecompletion` component. These metadata fields are used
+            to describe the data stored in the `filter` table and provide
+            information about the fields such as `userid`, `name`, `users`,
+            `cohorts`, `courses`, `starting_date`, `ending_date`,
+            `order_by_column`, and `order_by_type`. */
+            privacy:metadata:filter:order_by_type',
         ], 'privacy:metadata:filter');
 
         return $collection;
@@ -66,7 +73,7 @@ class provider implements
      * @param int $userid The user to search.
      * @return contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $contextlist->add_from_sql(
             'SELECT c.id
