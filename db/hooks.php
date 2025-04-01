@@ -15,17 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Hook callbacks for Report Module Completion plugin.
  *
  * @package    report_modulecompletion
- * @copyright  2023 L’Institut Agro Enseignement à distance
+ * @copyright  2025 L’Institut Agro Enseignement à distance
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2025040100; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2024100700; // Requires this Moodle version.
-$plugin->component = 'report_modulecompletion'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.5.0.0';
+$callbacks = [
+    [
+        'hook' => \core\hook\after_config::class,
+        'callback' => [\report_modulecompletion\local\hook_callbacks::class, 'after_config'],
+    ],
+];
