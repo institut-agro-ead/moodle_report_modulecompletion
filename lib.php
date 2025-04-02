@@ -26,6 +26,12 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/report/modulecompletion/locallib.php');
 
+/**
+ * Triggered as soon as practical on every moodle bootstrap after config has
+ * been loaded.
+ *
+ * @return void
+ */
 function report_modulecompletion_after_config() {
     // Check if some activity module was selected in the settings.and has been removed from Moodle.
     $moduleslist    = report_modulecompletion_get_module_types(false); // Modules list from DB.
