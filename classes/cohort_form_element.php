@@ -74,7 +74,7 @@ class report_modulecompletion_cohort_form_element extends MoodleQuickForm_cohort
             if (!$cohort->visible && !has_capability('moodle/cohort:view', $cohortcontext)) {
                 continue;
             }
-            $label = format_string($cohort->name, true, $currentcontext);
+            $label = format_string($cohort->name, true, ['context' => $currentcontext]);
             $this->addOption($label, $cohort->id);
         }
 
