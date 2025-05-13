@@ -25,6 +25,8 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/report/modulecompletion/locallib.php');
+use core_user\output\myprofile\tree;
+use core_user\output\myprofile\node;
 
 /**
  * Triggered as soon as practical on every moodle bootstrap after config has
@@ -40,4 +42,24 @@ function report_modulecompletion_after_config() {
     $purgedmodules = array_filter($trackedmodules, fn ($moduleid) => array_key_exists($moduleid, $moduleslist));
     // Finally, we set the config with the updated list of modules.
     set_config('modules_list', implode(',', $purgedmodules), 'report_modulecompletion');
+}
+
+/**
+ * Add nodes to myprofile page.
+ *
+ * @param tree $tree Tree object
+ * @param stdClass $user user object
+ * @param bool $iscurrentuser
+ * @param stdClass $course Course object
+ *
+ * @return bool
+ */
+function report_modulecompletion_myprofile_navigation(tree $tree, $user, $iscurrentuser, $course) {
+    $context = context_user::instance($user->id);
+    if (has_capability('report/modulecompletion:view', $context)) {
+        $url = new moodle_url('/report/modulecompletion/user.php', ['id' => $user->id]);
+        $node = new node('reports', 'modulecompletion', get_string('pluginname', 'report_modulecompletion'),
+            null, $url);
+        $tree->add_node($node);
+    }
 }

@@ -1,0 +1,81 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template report_modulecompletion/user_reports
+
+    Renders reports for a specific user
+
+    Example context (json):
+    {
+      "user_id": 123,
+      "first_name": "John",
+      "last_name": "Smith",
+      "email": "john.smith@example.com",
+      "meta_totals": {
+        "name": "My metadata",
+        "counter": 15
+      },
+      "most_recent_completed_module_date": "2025-01-01",
+      "completed_modules": 10,
+      "total_modules": 50,
+      "courses": [],
+      "no_data": false,
+    }
+}}
+<div class="report_modulecompletion_user_reports container-fuild">
+  {{#no_data}}
+    <div class="text-center lead">
+        <h2>{{#str}} pluginname, report_modulecompletion {{/str}}</h2>
+        <h3>
+        {{#str}}no_reports, report_modulecompletion{{/str}}
+        </h3>
+    </div>
+  {{/no_data}}
+  {{^no_data}}
+    <div class="text-center lead">
+      <h2>{{#str}} pluginname, report_modulecompletion {{/str}}</h2>
+      <div class="d-flex align-items-center justify-content-center text-muted mb-2">
+        <article class="d-flex align-items-center">
+          <i class="far fa-calendar mr-2"></i>
+          <span>{{starting_date}}</span>
+        </article>
+        <i class="fa fa-arrows-alt-h mx-4"></i>
+        <article class="d-flex align-items-center">
+          <span>{{ending_date}}</span>
+          <i class="far fa-calendar-check ml-2"></i>
+        </article>
+      </div>
+      {{#meta_totals}}
+      <p class="mb-0">Total {{ name }} : <strong>{{ counter }}</strong></p>
+      {{/meta_totals}}
+      <p class="my-0">{{#str}} last_completion_date, report_modulecompletion {{/str}} : <strong>{{ most_recent_completed_module_date }}</strong></p>
+      <div class="row justify-content-center mt-4">
+        <div class="col-sm-12 col-lg-6">
+          <p class="h4 text-center">{{ completed_modules }} / {{ total_modules }} {{#str}} completed_modules, report_modulecompletion {{/str}}</p>
+          {{#progress_bar}}
+            {{> report_modulecompletion/progress-bar }}
+          {{/progress_bar}}
+        </div>
+      </div>
+    </div>
+    <div class="d-inline-block my-2">
+        <a href="{{globals.config.wwwroot}}/report/modulecompletion/user.php?action=export&id={{user_id}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (CSV)</a>
+        <a href="{{globals.config.wwwroot}}/report/modulecompletion/user.php?action=export&type=xlsx&id={{user_id}}" class="btn btn-success">{{#str}} export, core_role {{/str}} (Excel)</a>
+    </div>
+    {{> report_modulecompletion/user_report_details }}
+  {{/no_data}}
+</div>
