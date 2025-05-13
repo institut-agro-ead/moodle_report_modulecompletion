@@ -18,11 +18,10 @@ declare(strict_types=1);
 
 namespace report_modulecompletion\event;
 
-use context_system;
-use coding_exception;
 use core\event\base;
 use report_modulecompletion\persistents\filter;
 use moodle_url;
+use report_modulecompletion\traits\can_create_event;
 
 /**
  * Report builder custom report viewed event class.
@@ -46,7 +45,7 @@ use moodle_url;
  * }
  */
 class report_viewed extends base {
-
+    use can_create_event;
     /**
      * Initialise the event data.
      */
@@ -54,39 +53,6 @@ class report_viewed extends base {
         $this->data['objecttable'] = filter::TABLE;
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_OTHER;
-    }
-
-    /**
-     * Creates an instance from a report object
-     *
-     * @param filter $report
-     * @return self
-     */
-    public static function create_from_object(filter $report): self {
-        $eventparams = [
-            'context'  => context_system::instance(),
-            'objectid' => $report->get('id'),
-            'other' => [
-                'name'     => $report->get('name'),
-                'filters'   => [
-                    'userids' => $report->get('users'),
-                    'cohortids' => $report->get('cohorts'),
-                    'courseids' => $report->get('courses'),
-                    'only_cohorts_courses' => !!$report->get('only_cohorts_courses'),
-                    'starting_date' => userdate($report->get('starting_date'), get_string('strftimedatemonthabbr',
-                    'core_langconfig')),
-                    'ending_date' => userdate($report->get('ending_date'), get_string('strftimedatemonthabbr',
-                    'core_langconfig')),
-                    'order_by_column' => get_string('form_order_by_' . $report->get('order_by_column'),
-                    'report_modulecompletion'),
-                    'order_by_type' => get_string('form_order_by_' . $report->get('order_by_type'),
-                    'report_modulecompletion'),
-                ],
-            ],
-        ];
-        $event = self::create($eventparams);
-        $event->add_record_snapshot($event->objecttable, $report->to_record());
-        return $event;
     }
 
     /**
@@ -105,18 +71,6 @@ class report_viewed extends base {
      */
     public function get_description() {
         return "The user with id '$this->userid' viewed the module completion report with id '$this->objectid'.";
-    }
-
-    /**
-     * Custom validations.
-     *
-     * @throws coding_exception
-     */
-    protected function validate_data(): void {
-        parent::validate_data();
-        if (!isset($this->objectid)) {
-            throw new coding_exception('The \'objectid\' must be set.');
-        }
     }
 
     /**
