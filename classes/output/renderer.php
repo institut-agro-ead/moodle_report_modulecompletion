@@ -69,6 +69,19 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
+     * Renders reports for a specific user.
+     *
+     * @param stdClass $user The user
+     * @param array $reports The reports
+     * @return string|bool
+     */
+    public function render_user_reports($user, $reports) {
+        $reportsrenderable = new user_reports($user, $reports);
+        $data = $reportsrenderable->export_for_template($this);
+        return $this->render_from_template('report_modulecompletion/user_reports', $data);
+    }
+
+    /**
      * Renders a specific error.
      *
      * @param string $error The error to display

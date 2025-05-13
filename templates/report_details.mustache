@@ -62,9 +62,9 @@
           </div>
           <div class="order-last d-flex align-items-center flex-shrink-0">
             <div class="course_progress">
-              {{#progress-bar}}
+              {{#progress_bar}}
                 {{> report_modulecompletion/progress-bar }}
-              {{/progress-bar}}
+              {{/progress_bar}}
               <h6 class="card-subtitle text-muted">{{ completed_modules }} / {{ total_modules }} {{#str}} completed_modules, report_modulecompletion {{/str}}</h6>
             </div>
             <button class="ml-3 mb-3 btn btn-outline-info show_hide_all_trigger" type="button" data-collapsed="true" data-button-text-show="{{#str}} expand, report_modulecompletion {{/str}}" data-button-text-hide="{{#str}} collapse, report_modulecompletion {{/str}}">

@@ -418,9 +418,9 @@ function report_modulecompletion_export_csv($reports = []) {
                     array_column($report['meta_totals'], 'counter')
                 );
                 $data[] = $course['completed_modules'] . ' ' . get_string('outof', 'mod_lesson', $course['total_modules']);
-                $data[] = $course['progress-bar']['progress'] . '%';
+                $data[] = $course['progress_bar']['progress'] . '%';
                 $data[] = $report['completed_modules'] . ' ' . get_string('outof', 'mod_lesson', $report['total_modules']);
-                $data[] = $report['progress-bar']['progress'] . '%';
+                $data[] = $report['progress bar']['progress'] . '%';
                 $data[] = $report['most_recent_completed_module_date'];
                 $writer->add_data($data);
             }
@@ -501,9 +501,9 @@ function report_modulecompletion_export_xlsx($reports = []) {
                     }
                 }
                 $myxls->write_string($rowpos, $colpos++, $course['completed_modules'] . ' / ' . $course['total_modules']);
-                $myxls->write_string($rowpos, $colpos++, $course['progress-bar']['progress'] . '%');
+                $myxls->write_string($rowpos, $colpos++, $course['progress_bar']['progress'] . '%');
                 $myxls->write_string($rowpos, $colpos++, $report['completed_modules'] . ' / ' . $report['total_modules']);
-                $myxls->write_string($rowpos, $colpos++, $report['progress-bar']['progress'] . '%');
+                $myxls->write_string($rowpos, $colpos++, $report['progress_bar']['progress'] . '%');
                 $myxls->write_date(
                     $rowpos,
                     $colpos++,
