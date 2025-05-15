@@ -177,6 +177,10 @@ class user_reports implements renderable, templatable {
                 }
             }
         }
+        global $CFG;
+        $vmatches = [];
+        preg_match('/^(\d+\.\d+).*$/', $CFG->release, $vmatches);
+        $data->isbeforemoodle42 = ($vmatches[1] ?? 0.0) < 4.2;
         return $data;
     }
 }

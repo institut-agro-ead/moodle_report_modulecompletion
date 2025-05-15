@@ -34,6 +34,7 @@
       "total_modules": 50,
       "courses": [],
       "no_data": false,
+      "isbeforemoodle42": false,
     }
 }}
 <div class="report_modulecompletion_user_reports container-fuild">
@@ -50,13 +51,28 @@
       <h2>{{#str}} pluginname, report_modulecompletion {{/str}}</h2>
       <div class="d-flex align-items-center justify-content-center text-muted mb-2">
         <article class="d-flex align-items-center">
-          <i class="far fa-calendar mr-2"></i>
+          {{#isbeforemoodle42}}
+            <i class="fa fa-calendar mr-2"></i>
+          {{/isbeforemoodle42}}
+          {{^isbeforemoodle42}}
+            <i class="far fa-calendar mr-2"></i>
+          {{/isbeforemoodle42}}
           <span>{{starting_date}}</span>
         </article>
-        <i class="fa fa-arrows-alt-h mx-4"></i>
+        {{#isbeforemoodle42}}
+          <i class="fa fa-arrows-h mx-4"></i>
+        {{/isbeforemoodle42}}
+        {{^isbeforemoodle42}}
+          <i class="fa fa-arrows-alt-h mx-4"></i>
+        {{/isbeforemoodle42}}
         <article class="d-flex align-items-center">
           <span>{{ending_date}}</span>
-          <i class="far fa-calendar-check ml-2"></i>
+          {{#isbeforemoodle42}}
+            <i class="fa fa-calendar-check-o ml-2"></i>
+          {{/isbeforemoodle42}}
+          {{^isbeforemoodle42}}
+            <i class="far fa-calendar-check ml-2"></i>
+          {{/isbeforemoodle42}}
         </article>
       </div>
       {{#meta_totals}}
