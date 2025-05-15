@@ -36,8 +36,10 @@ use core_user\output\myprofile\node;
  * @return bool
  */
 function report_modulecompletion_myprofile_navigation(tree $tree, $user, $iscurrentuser, $course) {
+    global $USER;
     $context = context_user::instance($user->id);
-    if (has_capability('report/modulecompletion:view', $context)) {
+    // We allow users to see their own achievement reports without checking the for capability.
+    if (has_capability('report/modulecompletion:view', $context) || $user->id == $USER->id) {
         $url = new moodle_url('/report/modulecompletion/user.php', ['id' => $user->id]);
         $node = new node('reports', 'modulecompletion', get_string('pluginname', 'report_modulecompletion'),
             null, $url);
