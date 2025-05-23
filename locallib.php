@@ -340,7 +340,7 @@ function report_modulecompletion_get_reports(
     JOIN {capabilities} cap ON rc.capability = cap.name ';
     $sql .= $metafrom;
     $sql .= ' WHERE ';
-    if ($modules = get_config('report_modulecompletion', 'moduleslist')) {
+    if (isset($modules)) {
         list($inmodsql, $inmodparams) = $DB->get_in_or_equal(explode(',', $modules));
         $sql .= 'm.id ' . $inmodsql . ' AND ';
         $params = array_merge($params, $inmodparams);
