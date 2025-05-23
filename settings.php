@@ -43,7 +43,7 @@ if ($hassiteconfig) {
         $types = report_modulecompletion_get_module_types();
 
         $settingspage->add(new admin_setting_configmulticheckbox(
-            'report_modulecompletion/moduleslist',
+            'report_modulecompletion/modules_list',
             get_string('modules_list_label', 'report_modulecompletion'),
             get_string('modules_list_description', 'report_modulecompletion'),
             $types,

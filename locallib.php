@@ -311,7 +311,7 @@ function report_modulecompletion_get_reports(
       AND crse_modules.completion > 0
       AND crse_modules.course = c.id AND crse_sections.course = c.id) AS has_restrictions,
     c.fullname AS course_name,";
-    if ($modules = get_config('report_modulecompletion', 'moduleslist')) {
+    if ($modules = get_config('report_modulecompletion', 'modules_list')) {
         $list     = explode(',', $modules);
         $fulllist = report_modulecompletion_get_module_types(false);
         $sql .= ' CASE';
