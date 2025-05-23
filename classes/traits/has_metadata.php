@@ -41,12 +41,12 @@ trait has_metadata {
     /**
      * @var array List of selected metadata from settings
      */
-    private $selectedmetas;
+    private $selectedmetas = [];
 
     /**
      * @var array List of numerical metadata
      */
-    private $numericmetas;
+    private $numericmetas = [];
 
     /**
      * Converts metadata from its defined type.

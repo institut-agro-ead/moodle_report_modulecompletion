@@ -91,7 +91,7 @@ if ($hassiteconfig) {
             ));
 
             $numericmetadata = explode(',', get_config('report_modulecompletion', 'numeric_metadata_list'));
-            if (count($numericmetadata) > 0) {
+            if (count($numericmetadata) > 0 && $numericmetadata[0] !== '') {
                 $metasettings->add(new admin_setting_heading(
                     'report_modulecompletion/metadata_conversion',
                     get_string('numeric_metadata_conversion', 'report_modulecompletion'),

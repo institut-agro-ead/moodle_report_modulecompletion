@@ -58,10 +58,12 @@ class user_reports implements renderable, templatable {
         $this->user = $user;
         $this->reports = $reports;
         if (get_config('report_modulecompletion', 'use_metadata') &&
-        $selectedmetas = get_config('report_modulecompletion', 'metadata_list')) {
+            $selectedmetas = get_config('report_modulecompletion', 'metadata_list')) {
             $this->metas = report_modulecompletion_get_modules_metadata(true);
-            $this->selectedmetas = explode(',', $selectedmetas);
-            $this->numericmetas = explode(',', get_config('report_modulecompletion', 'numeric_metadata_list'));
+            $this->selectedmetas = $selectedmetas !== '' ? explode(',', $selectedmetas) : [];
+            $selectednumericmetas = get_config('report_modulecompletion', 'numeric_metadata_list');
+            $this->numericmetas = $selectednumericmetas !== '' ?
+                explode(',', get_config('report_modulecompletion', 'numeric_metadata_list')) : [];
         }
     }
 
@@ -84,7 +86,7 @@ class user_reports implements renderable, templatable {
         $data->total_modules = $report->total_modules;
         $data->courses = [];
         $data->meta_totals = [];
-        if ($this->numericmetas) {
+        if (count($this->numericmetas)) {
             foreach ($this->numericmetas as $metaid) {
                 $data->meta_totals[$metaid] = [
                     'name' => ucwords($this->metas[$metaid]->name),
@@ -126,7 +128,7 @@ class user_reports implements renderable, templatable {
                 $data->completed_modules++;
                 $data->courses[$report->course_id]['completed_modules']++;
                 // Metadata is numeric, we increment the total counters (user and course).
-                if ($this->selectedmetas && $this->numericmetas &&
+                if (count($this->selectedmetas) && count($this->numericmetas) &&
                 isset($data->meta_totals[$report->meta_id]) && $report->meta_data !== null) {
                     $data->meta_totals[$report->meta_id]['counter'] += (float) $report->meta_data;
                     $data->courses[$report->course_id]['meta_totals'][$report->meta_id]['counter'] +=
@@ -134,7 +136,7 @@ class user_reports implements renderable, templatable {
                 }
             }
             // Appends metadata if there is any.
-            if ($this->selectedmetas) {
+            if (count($this->selectedmetas)) {
                 $data->reportscourses[$report->course_id]['completions']['rows'][$report->id][] =
                 $report->meta_id ?
                     $this->convert_metadata($report->meta_id, $report->meta_data) : '';
@@ -167,7 +169,7 @@ class user_reports implements renderable, templatable {
             $course['meta_totals'] = $this->get_converted_numeric_metadata(array_values($course['meta_totals']));
             $course['completions']['rows'] = array_values($course['completions']['rows']);
             // If metadata is null we fill the rest of the columns of the row.
-            if ($this->selectedmetas) {
+            if (count($this->selectedmetas)) {
                 foreach ($course['completions']['rows'] as &$row) {
                     if (count($row) !== (FIXED_NUM_COLS + count($this->selectedmetas))) {
                         $row = array_merge(

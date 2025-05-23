@@ -55,12 +55,12 @@ trait has_courses {
                 'rows' => [],
             ],
         ];
-        if ($this->selectedmetas) {
+        if (count($this->selectedmetas)) {
             foreach ($this->selectedmetas as $metaid) {
                 $courseinfos['completions']['headers'][] = ucwords($this->metas[$metaid]->name);
             }
         }
-        if ($this->numericmetas) {
+        if (count($this->numericmetas)) {
             foreach ($this->numericmetas as $metaid) {
                 $courseinfos['meta_totals'][$metaid] = [
                     'name' => ucwords($this->metas[$metaid]->name),
