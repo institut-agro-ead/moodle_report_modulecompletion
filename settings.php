@@ -69,6 +69,13 @@ if ($hassiteconfig) {
                 1
             ));
 
+            $settingspage->add(new admin_setting_configcheckbox(
+                'report_modulecompletion/show_metadata_in_profile',
+                get_string('show_metadata_in_profile_label', 'report_modulecompletion'),
+                get_string('show_metadata_in_profile_description', 'report_modulecompletion'),
+                1
+            ));
+
             $metasettings->add(new admin_setting_configmulticheckbox(
                 'report_modulecompletion/metadata_list',
                 get_string('metadata_list_label', 'report_modulecompletion'),

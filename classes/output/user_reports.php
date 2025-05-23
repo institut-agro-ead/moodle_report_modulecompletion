@@ -58,7 +58,8 @@ class user_reports implements renderable, templatable {
         $this->user = $user;
         $this->reports = $reports;
         if (get_config('report_modulecompletion', 'use_metadata') &&
-            $selectedmetas = get_config('report_modulecompletion', 'metadata_list')) {
+            $selectedmetas = get_config('report_modulecompletion', 'metadata_list') &&
+            get_config('report_modulecompletion', 'show_metadata_in_profile')) {
             $this->metas = report_modulecompletion_get_modules_metadata(true);
             $this->selectedmetas = $selectedmetas !== '' ? explode(',', $selectedmetas) : [];
             $selectednumericmetas = get_config('report_modulecompletion', 'numeric_metadata_list');
