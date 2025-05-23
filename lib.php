@@ -37,11 +37,11 @@ use core_user\output\myprofile\node;
 function report_modulecompletion_after_config() {
     // Check if some activity module was selected in the settings.and has been removed from Moodle.
     $moduleslist    = report_modulecompletion_get_module_types(false); // Modules list from DB.
-    $trackedmodules = explode(',', get_config('report_modulecompletion', 'modules_list')); // Tracked modules list.
+    $trackedmodules = explode(',', get_config('report_modulecompletion', 'moduleslist')); // Tracked modules list.
     // We then filter out the modules that are not existant anymore.
     $purgedmodules = array_filter($trackedmodules, fn ($moduleid) => array_key_exists($moduleid, $moduleslist));
     // Finally, we set the config with the updated list of modules.
-    set_config('modules_list', implode(',', $purgedmodules), 'report_modulecompletion');
+    set_config('moduleslist', implode(',', $purgedmodules), 'report_modulecompletion');
 }
 
 /**

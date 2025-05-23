@@ -82,5 +82,17 @@ function xmldb_report_modulecompletion_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020120800, 'report', 'modulecompletion');
     }
 
+    if ($oldversion < 2025051300) {
+        // Convert the old modules_list setting to the new one (moduleslist).
+        $moduleslist = get_config('report_modulecompletion', 'modules_list');
+        set_config(
+            'moduleslist',
+            $moduleslist,
+            'report_modulecompletion'
+        );
+
+        upgrade_plugin_savepoint(true, 2025051300, 'report', 'modulecompletion');
+    }
+
     return true;
 }

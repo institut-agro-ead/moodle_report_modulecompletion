@@ -311,7 +311,7 @@ function report_modulecompletion_get_reports(
       AND crse_modules.completion > 0
       AND crse_modules.course = c.id AND crse_sections.course = c.id) AS has_restrictions,
     c.fullname AS course_name,";
-    if ($modules = get_config('report_modulecompletion', 'modules_list')) {
+    if ($modules = get_config('report_modulecompletion', 'moduleslist')) {
         $list     = explode(',', $modules);
         $fulllist = report_modulecompletion_get_module_types(false);
         $sql .= ' CASE';
@@ -340,7 +340,7 @@ function report_modulecompletion_get_reports(
     JOIN {capabilities} cap ON rc.capability = cap.name ';
     $sql .= $metafrom;
     $sql .= ' WHERE ';
-    if ($modules = get_config('report_modulecompletion', 'modules_list')) {
+    if ($modules = get_config('report_modulecompletion', 'moduleslist')) {
         list($inmodsql, $inmodparams) = $DB->get_in_or_equal(explode(',', $modules));
         $sql .= 'm.id ' . $inmodsql . ' AND ';
         $params = array_merge($params, $inmodparams);
