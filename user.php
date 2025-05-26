@@ -32,9 +32,9 @@ require_login();
 
 $userid = required_param('id', PARAM_INT);
 $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
+$context = context_user::instance($userid);
 // We allow users to see their own achievement reports without checking the for capability.
 if ((int)$USER->id !== $userid) {
-    $context = context_user::instance($userid);
     require_capability('report/modulecompletion:view', $context);
 }
 
