@@ -46,6 +46,10 @@ class hook_callbacks {
         // Check if some activity module was selected in the settings.and has been removed from Moodle.
         $moduleslist = report_modulecompletion_get_module_types(false); // Modules list form DB.
         $trackedmodules = explode(',', get_config('report_modulecompletion', 'modules_list')); // Tracked modules list.
+        if ($trackedmodules && count($trackedmodules) === 1 && $trackedmodules[0] === '') {
+            // This is only supposed to happen during the plugin installation.
+            return;
+        }
         // We then filter out the modules that are not existant anymore.
         $purgedmodules = array_filter($trackedmodules, fn($moduleid) => array_key_exists($moduleid, $moduleslist));
         // Finally, we set the config with the updated list of modules.
