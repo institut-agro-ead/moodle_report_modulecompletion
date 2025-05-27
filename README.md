@@ -62,6 +62,24 @@ You will also be able to specify which of these metadata are numerical so you ca
 
 ![Reports view with metadata](screenshots/reports_metadata.png)
 
-### Contributing
+## Per-User Tracking
+
+If you want to track a specific user, you can do so by going to the user profile page and clicking on the **Module completion tracker** link in the **Reports** section. This will take you to a page that displays the user's module completion progress since the first time they logged.
+
+### Authorization
+
+To view the per-user tracking, users need the `report/modulecompletion:view` capability. This can be granted in two contexts:
+- **System context**: In this case, the user will have access to the module tracker for all users directly from their profile page.
+- **User context**: Here, the user can only view the module tracker for users they are permitted to access, such as the [parent role](https://docs.moodle.org/500/en/Parent_role) being a typical example.
+
+**Without any additional capability, logged-in users can only view their own module completion progress from their profile page.**
+
+### Metadata
+If you have the `local_metadata` plugin installed and you have checked **Use metadata plugin** in the settings, you can either decide to show/hide metadata on user’s specific tracking page by checking the **Show metadata in user profile** checkbox on the settings page.
+
+![Module completion tracker link in user’s profile](screenshots/profile_page.png)
+![Module completion tracker page for a specific user](screenshots/user_reports.png)
+
+## Contributing
 
 If you wish to contribute, you can report bugs on the issue tracker and make pull requests.
