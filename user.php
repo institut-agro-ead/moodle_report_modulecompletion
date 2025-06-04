@@ -30,7 +30,7 @@ use report_modulecompletion\output\user_reports;
 
 require_login();
 
-$userid = required_param('id', PARAM_INT);
+$userid = optional_param('id', $USER->id, PARAM_INT);
 $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
 $context = context_user::instance($userid);
 // We allow users to see their own achievement reports without checking the for capability.
