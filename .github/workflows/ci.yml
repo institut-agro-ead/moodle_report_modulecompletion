@@ -61,27 +61,21 @@ jobs:
           - php: "8.2"
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
-            env:
-              PGVER: 13
-              DB_PORT: 5432
+            port: 5432
           - php: "8.2"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
           - php: "8.3"
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
-            env:
-              PGVER: 13
-              DB_PORT: 5432
+            port: 5432
           - php: "8.3"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
           - php: "8.4"
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
-            env:
-              PGVER: 13
-              DB_PORT: 5432
+            port: 5432
           - php: "8.4"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
@@ -115,6 +109,7 @@ jobs:
           moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
+          DB_PORT: ${{ matrix.port }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: PHP Lint
