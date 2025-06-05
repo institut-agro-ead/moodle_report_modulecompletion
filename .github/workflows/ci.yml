@@ -62,8 +62,8 @@ jobs:
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
             env:
-              PGVER: 14
-              DB_PORT: 5433
+              PGVER: 13
+              DB_PORT: 5432
           - php: "8.2"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
@@ -71,8 +71,8 @@ jobs:
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
             env:
-              PGVER: 14
-              DB_PORT: 5433
+              PGVER: 13
+              DB_PORT: 5432
           - php: "8.3"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
@@ -80,8 +80,8 @@ jobs:
             moodle-branch: "MOODLE_500_STABLE"
             database: pgsql
             env:
-              PGVER: 14
-              DB_PORT: 5433
+              PGVER: 13
+              DB_PORT: 5432
           - php: "8.4"
             moodle-branch: "MOODLE_500_STABLE"
             database: mariadb
