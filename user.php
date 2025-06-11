@@ -34,7 +34,7 @@ $userid = optional_param('id', $USER->id, PARAM_INT);
 $user = $DB->get_record('user', ['id' => $userid], '*', MUST_EXIST);
 $context = context_user::instance($userid);
 // We allow users to see their own achievement reports without checking the for capability.
-if ((int)$USER->id !== $userid) {
+if ($USER->id !== $userid) {
     require_capability('report/modulecompletion:view', $context);
 }
 
